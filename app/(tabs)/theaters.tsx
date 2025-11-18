@@ -1,42 +1,107 @@
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { Image } from 'expo-image';
-import { StyleSheet } from 'react-native';
+import React from 'react';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
+import { useAppState } from './AppStateContext';
 
-export default function Movies() {
+export default function TheatersScreen() {
+  const { state } = useAppState();
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#0c1e33', dark: '#0c1e33' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/CineCaribe - LOGO.png')}
-          style={styles.reactLogo}
-        />
-      }>
-
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-    </ParallaxScrollView>
+    <View style={styles.container}>
+      <ScrollView style={styles.scrollView}>
+        <Text style={styles.title}>Our Cinemas</Text>
+        {state.cinemas.map(cinema => (
+          <View key={cinema.id} style={styles.cinemaCard}>
+            <Text style={styles.cinemaName}>{cinema.name}</Text>
+            <Text style={styles.cinemaLocation}>{cinema.location}</Text>
+            <View style={styles.cinemaStats}>
+              <View style={styles.stat}>
+                <Text style={styles.statValue}>{cinema.screens}</Text>
+                <Text style={styles.statLabel}>Screens</Text>
+              </View>
+              <View style={styles.stat}>
+                <Text style={styles.statValue}>{cinema.capacity}</Text>
+                <Text style={styles.statLabel}>Capacity</Text>
+              </View>
+              <View style={styles.stat}>
+                <Text style={styles.statValue}>75%</Text>
+                <Text style={styles.statLabel}>Occupancy</Text>
+              </View>
+            </View>
+            <TouchableOpacity style={styles.viewMoviesButton}>
+              <Text style={styles.viewMoviesText}>View Movies</Text>
+            </TouchableOpacity>
+          </View>
+        ))}
+      </ScrollView>
+    </View>
   );
 }
 
-const styles = StyleSheet.create( {
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
   },
-  titleContainer: {
+  scrollView: {
+    padding: 16,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 16,
+    color: '#141414',
+  },
+  cinemaCard: {
+    backgroundColor: 'white',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  cinemaName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  cinemaLocation: {
+    color: '#666',
+    marginBottom: 12,
+  },
+  cinemaStats: {
     flexDirection: 'row',
-    gap: 8,
+    justifyContent: 'space-between',
+    marginBottom: 16,
   },
-    reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  stat: {
+    alignItems: 'center',
+  },
+  statValue: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#e50914',
+  },
+  statLabel: {
+    fontSize: 12,
+    color: '#666',
+  },
+  viewMoviesButton: {
+    backgroundColor: '#e50914',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  viewMoviesText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
 });
