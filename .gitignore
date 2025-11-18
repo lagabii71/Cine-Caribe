@@ -41,3 +41,8 @@ app-example
 # generated native folders
 /ios
 /android
+# API KEYS AND SECRETS
+const TMDB_API_KEY = '4694d05ccce51daf7b381a75831fe8f9';
+const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
+const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+

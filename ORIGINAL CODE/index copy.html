@@ -1,0 +1,3985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caribbean Cinemas - Complete Movie Booking System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #e50914;
+            --secondary: #141414;
+            --accent: #54b9c5;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+            --shadow: 0 4px 12px #00000026;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: linear-gradient(135deg, var(--secondary) 0%, #000 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .logo span {
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-links a.active {
+            background-color: var(--primary);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.6rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #f40612;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .btn-outline:hover {
+            background-color: white;
+            color: var(--secondary);
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .btn-warning {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-info {
+            background-color: var(--info);
+            color: white;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* View Management */
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1489599804159-0d18bcd98672?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+        }
+
+        /* Cards & Grids */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            background: var(--secondary);
+            color: white;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .stats-card .card-body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .stats-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 1rem 0;
+        }
+
+        .stats-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Movie Cards */
+        .movie-card {
+            cursor: pointer;
+        }
+
+        .movie-poster {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .movie-info {
+            padding: 1rem;
+        }
+
+        .movie-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .movie-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .movie-rating {
+            color: #ffc107;
+            font-weight: 600;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.1);
+        }
+
+        /* Seat Selection */
+        .seat-selection {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .screen {
+            background: linear-gradient(to right, #aaa, #ddd, #aaa);
+            height: 20px;
+            margin: 2rem 0;
+            border-radius: 50% 50% 0 0;
+            text-align: center;
+            color: #333;
+            font-weight: 600;
+            padding-top: 5px;
+        }
+
+        .seats-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin: 2rem 0;
+        }
+
+        .seat-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .seat {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            background: #ddd;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+        }
+
+        .seat:hover {
+            background: #bbb;
+        }
+
+        .seat.selected {
+            background: var(--success);
+            color: white;
+        }
+
+        .seat.occupied {
+            background: var(--danger);
+            cursor: not-allowed;
+        }
+
+        .seat.vip {
+            background: var(--warning);
+        }
+
+        .seat-legend {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.8rem;
+        }
+
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 2px;
+        }
+
+        /* Booking Summary */
+        .booking-summary {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .summary-total {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid #eee;
+        }
+
+        /* Tables */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+        }
+
+        .table th, .table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .table tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        /* Dashboard Layout */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .sidebar {
+            background: var(--secondary);
+            color: white;
+            padding: 2rem 0;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 1rem 1.5rem;
+            color: white;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--primary);
+        }
+
+        .dashboard-content {
+            padding: 2rem;
+        }
+
+        /* Tabs */
+        .admin-tab-content {
+            display: none;
+        }
+
+        .admin-tab-content.active {
+            display: block;
+        }
+
+        /* Charts */
+        .chart-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        /* Authentication */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+        }
+
+        .auth-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .auth-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--secondary);
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .auth-switch a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .auth-card {
+                padding: 2rem;
+            }
+            
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Utility Classes */
+        .text-center {
+            text-align: center;
+        }
+        
+        .text-success {
+            color: var(--success);
+        }
+        
+        .text-danger {
+            color: var(--danger);
+        }
+        
+        .text-warning {
+            color: var(--warning);
+        }
+        
+        .mb-3 {
+            margin-bottom: 1rem;
+        }
+        
+        .mt-3 {
+            margin-top: 1rem;
+        }
+        
+        .d-none {
+            display: none;
+        }
+        
+        .d-flex {
+            display: flex;
+        }
+        
+        .justify-between {
+            justify-content: space-between;
+        }
+        
+        .align-center {
+            align-items: center;
+        }
+
+        /* Profile Section */
+        .profile-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+        }
+
+        .profile-info h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-info p {
+            color: #666;
+        }
+
+        .profile-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .detail-label {
+            font-weight: 600;
+        }
+
+        /* Cinema Management */
+        .cinema-management {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .cinema-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .cinema-card {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .cinema-card:hover {
+            box-shadow: var(--shadow);
+        }
+
+        .cinema-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .cinema-location {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .cinema-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        /* Carousel */
+        .carousel {
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .carousel-inner {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .carousel-item {
+            min-width: 25%;
+            padding: 0 10px;
+        }
+
+        .carousel-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+
+        .carousel-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .badge-warning {
+            background: var(--warning);
+            color: var(--dark);
+        }
+
+        .badge-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .badge-info {
+            background: var(--info);
+            color: white;
+        }
+
+        /* Movie Details */
+        .movie-details {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .movie-poster-large {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .movie-info-detailed h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .movie-meta-detailed {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .movie-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .movie-description {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .cast-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .cast-member {
+            text-align: center;
+            width: 80px;
+        }
+
+        .cast-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #ddd;
+            margin: 0 auto 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #666;
+        }
+
+        .cast-name {
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .cast-role {
+            font-size: 0.7rem;
+            color: #666;
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 4px;
+            color: white;
+            font-weight: 500;
+            z-index: 3000;
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification-success {
+            background-color: var(--success);
+        }
+
+        .notification-error {
+            background-color: var(--danger);
+        }
+
+        .notification-info {
+            background-color: var(--info);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Loading Spinner */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fas fa-film"></i>
+                <span>Caribbean Cinemas</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" class="nav-link active" data-view="home">Home</a></li>
+                <li><a href="#" class="nav-link" data-view="movies">Movies</a></li>
+                <li><a href="#" class="nav-link" data-view="cinemas">Cinemas</a></li>
+                <li><a href="#" class="nav-link" data-view="user-dashboard">My Bookings</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <button class="btn btn-outline" id="loginBtn">Login</button>
+                <button class="btn btn-primary" id="registerBtn">Register</button>
+                <button class="btn btn-primary d-none" id="logoutBtn">Logout</button>
+                <button class="btn btn-warning d-none" id="adminBtn">Admin Panel</button>
+                <button class="btn btn-danger d-none" id="superAdminBtn">Super Admin</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Home View -->
+        <div id="home-view" class="view active">
+            <div class="hero-section">
+                <div class="hero-content">
+                    <h1>Welcome to Caribbean Cinemas</h1>
+                    <p>Book your favorite movies with ease. Browse showtimes, select seats, and enjoy the cinema experience.</p>
+                    <button class="btn btn-primary mt-3" style="font-size: 1.2rem; padding: 1rem 2rem;" data-view="movies">Browse Movies</button>
+                </div>
+            </div>
+
+            <!-- Now Showing Carousel -->
+            <h2 class="section-title">Now Showing</h2>
+            <div class="carousel">
+                <div class="carousel-inner" id="now-showing-carousel">
+                    <!-- Movies will be populated by JavaScript -->
+                </div>
+                <div class="carousel-controls">
+                    <button class="carousel-btn" id="carousel-prev">
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                    <button class="carousel-btn" id="carousel-next">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Coming Soon Carousel -->
+            <h2 class="section-title">Coming Soon</h2>
+            <div class="carousel">
+                <div class="carousel-inner" id="coming-soon-carousel">
+                    <!-- Movies will be populated by JavaScript -->
+                </div>
+                <div class="carousel-controls">
+                    <button class="carousel-btn" id="coming-soon-prev">
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                    <button class="carousel-btn" id="coming-soon-next">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Movies View -->
+        <div id="movies-view" class="view">
+            <h2 class="section-title">Browse Movies</h2>
+            
+            <div class="filters mb-3" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <select class="form-control" style="width: auto;" id="genre-filter">
+                    <option value="">All Genres</option>
+                    <option value="28">Action</option>
+                    <option value="35">Comedy</option>
+                    <option value="18">Drama</option>
+                    <option value="878">Science Fiction</option>
+                    <option value="27">Horror</option>
+                    <option value="10749">Romance</option>
+                    <option value="53">Thriller</option>
+                </select>
+                <select class="form-control" style="width: auto;" id="language-filter">
+                    <option value="">All Languages</option>
+                    <option value="english">English</option>
+                    <option value="spanish">Spanish</option>
+                    <option value="engwspa">English with Spanish</option>
+                </select>
+                <input type="text" class="form-control" style="width: auto;" id="search-movies" placeholder="Search movies...">
+            </div>
+            
+            <div class="loading" id="movies-loading">
+                <div class="spinner"></div>
+            </div>
+            
+            <div class="cards-grid" id="movies-grid">
+                <!-- Movies will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Cinemas View -->
+        <div id="cinemas-view" class="view">
+            <h2 class="section-title">Our Cinemas</h2>
+            
+            <div class="cinema-cards" id="cinemas-container">
+                <!-- Cinemas will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Movie Details View -->
+        <div id="movie-details-view" class="view">
+            <div class="d-flex justify-between align-center mb-3">
+                <button class="btn btn-outline" id="back-to-movies">
+                    <i class="fas fa-arrow-left"></i> Back to Movies
+                </button>
+                <h2 class="section-title" id="movie-detail-title">Movie Title</h2>
+                <div></div> <!-- Empty div for spacing -->
+            </div>
+            
+            <div class="loading" id="movie-details-loading">
+                <div class="spinner"></div>
+            </div>
+            
+            <div class="movie-details" id="movie-details-content">
+                <div>
+                    <img id="movie-detail-poster" src="" alt="Movie Poster" class="movie-poster-large">
+                </div>
+                <div class="movie-info-detailed">
+                    <h2 id="movie-detail-name"></h2>
+                    <div class="movie-meta-detailed">
+                        <div class="movie-meta-item">
+                            <i class="fas fa-clock"></i>
+                            <span id="movie-detail-duration"></span>
+                        </div>
+                        <div class="movie-meta-item">
+                            <i class="fas fa-star" style="color: #ffc107;"></i>
+                            <span id="movie-detail-rating"></span>
+                        </div>
+                        <div class="movie-meta-item">
+                            <i class="fas fa-film"></i>
+                            <span id="movie-detail-genre"></span>
+                        </div>
+                        <div class="movie-meta-item">
+                            <i class="fas fa-calendar"></i>
+                            <span id="movie-detail-release-date"></span>
+                        </div>
+                    </div>
+                    <div class="movie-description" id="movie-detail-description"></div>
+                    <div class="mt-3">
+                        <h4>Director</h4>
+                        <p id="movie-director"></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-clock"></i> Showtimes
+                </div>
+                <div class="card-body">
+                    <div id="showtimes-container">
+                        <!-- Showtimes will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Booking View -->
+        <div id="booking-view" class="view">
+            <div class="d-flex justify-between align-center mb-3">
+                <button class="btn btn-outline" id="back-to-movie-details">
+                    <i class="fas fa-arrow-left"></i> Back to Movie
+                </button>
+                <h2 class="section-title">Book Your Tickets</h2>
+                <div></div> <!-- Empty div for spacing -->
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+                <div class="seat-selection">
+                    <h3 id="booking-movie-title" class="mb-3"></h3>
+                    <div class="screen">SCREEN</div>
+                    <div class="seats-container" id="seats-container">
+                        <!-- Seats will be populated by JavaScript -->
+                    </div>
+                    <div class="seat-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #ddd;"></div>
+                            <span>Available</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: var(--success);"></div>
+                            <span>Selected</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: var(--danger);"></div>
+                            <span>Occupied</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: var(--warning);"></div>
+                            <span>VIP</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="booking-summary">
+                    <h3 class="mb-3">Booking Summary</h3>
+                    <div class="summary-item">
+                        <span>Movie:</span>
+                        <span id="summary-movie"></span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Cinema:</span>
+                        <span id="summary-cinema"></span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Showtime:</span>
+                        <span id="summary-showtime"></span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Seats:</span>
+                        <span id="summary-seats">None selected</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Tickets:</span>
+                        <span id="summary-tickets">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Price per ticket:</span>
+                        <span id="summary-price">$0</span>
+                    </div>
+                    <div class="summary-total">
+                        <span>Total:</span>
+                        <span id="summary-total">$0</span>
+                    </div>
+                    <button class="btn btn-primary mt-3" style="width: 100%;" id="confirm-booking">Confirm Booking</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Dashboard View -->
+        <div id="user-dashboard-view" class="view">
+            <h2 class="section-title">User Dashboard</h2>
+            
+            <div class="profile-section">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="profile-info">
+                        <h2 id="user-profile-name">User Name</h2>
+                        <p id="user-profile-email">user@example.com</p>
+                        <span class="badge badge-info" id="user-role-badge">Guest</span>
+                    </div>
+                </div>
+                
+                <div class="profile-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Phone:</span>
+                        <span id="user-profile-phone">+1234567890</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Member Since:</span>
+                        <span id="user-profile-join-date">2023</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Total Bookings:</span>
+                        <span id="user-profile-bookings">0</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Loyalty Points:</span>
+                        <span id="user-profile-points">150</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cards-grid mb-3">
+                <div class="card stats-card">
+                    <div class="card-header">
+                        <i class="fas fa-ticket-alt"></i> Total Bookings
+                    </div>
+                    <div class="card-body">
+                        <div class="stats-value" id="user-total-bookings">0</div>
+                        <div class="stats-label">All-time bookings</div>
+                    </div>
+                </div>
+                <div class="card stats-card">
+                    <div class="card-header">
+                        <i class="fas fa-film"></i> Movies Watched
+                    </div>
+                    <div class="card-body">
+                        <div class="stats-value" id="user-movies-watched">0</div>
+                        <div class="stats-label">Unique movies</div>
+                    </div>
+                </div>
+                <div class="card stats-card">
+                    <div class="card-header">
+                        <i class="fas fa-star"></i> Member Since
+                    </div>
+                    <div class="card-body">
+                        <div class="stats-value" id="user-member-since">2023</div>
+                        <div class="stats-label">Loyal customer</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-history"></i> Booking History
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>Movie</th>
+                                <th>Cinema</th>
+                                <th>Date</th>
+                                <th>Seats</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-bookings-table">
+                            <!-- Bookings will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard View -->
+        <div id="admin-dashboard-view" class="view">
+            <h2 class="section-title">Admin Dashboard</h2>
+            
+            <div class="cards-grid mb-3">
+                <div class="card stats-card">
+                    <div class="card-header">
+                        <i class="fas fa-ticket-alt"></i> Total Bookings
+                    </div>
+                    <div class="card-body">
+                        <div class="stats-value" id="admin-total-bookings">0</div>
+                        <div class="stats-label">All-time bookings</div>
+                    </div>
+                </div>
+                <div class="card stats-card">
+                    <div class="card-header">
+                        <i class="fas fa-dollar-sign"></i> Total Revenue
+                    </div>
+                    <div class="card-body">
+                        <div class="stats-value" id="admin-total-revenue">$0</div>
+                        <div class="stats-label">All-time revenue</div>
+                    </div>
+                </div>
+                <div class="card stats-card">
+                    <div class="card-header">
+                        <i class="fas fa-users"></i> Total Users
+                    </div>
+                    <div class="card-body">
+                        <div class="stats-value" id="admin-total-users">0</div>
+                        <div class="stats-label">Registered users</div>
+                    </div>
+                </div>
+                <div class="card stats-card">
+                    <div class="card-header">
+                        <i class="fas fa-film"></i> Total Movies
+                    </div>
+                    <div class="card-body">
+                        <div class="stats-value" id="admin-total-movies">0</div>
+                        <div class="stats-label">Active movies</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard">
+                <div class="sidebar">
+                    <ul class="sidebar-menu">
+                        <li><a href="#" class="admin-tab active" data-tab="analytics"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+                        <li><a href="#" class="admin-tab" data-tab="cinema-management"><i class="fas fa-building"></i> Cinema Management</a></li>
+                        <li><a href="#" class="admin-tab" data-tab="movies-management"><i class="fas fa-film"></i> Movies</a></li>
+                        <li><a href="#" class="admin-tab" data-tab="showtimes-management"><i class="fas fa-clock"></i> Showtimes</a></li>
+                        <li><a href="#" class="admin-tab" data-tab="bookings-management"><i class="fas fa-ticket-alt"></i> Bookings</a></li>
+                        <li><a href="#" class="admin-tab" data-tab="users-management"><i class="fas fa-users"></i> Users</a></li>
+                    </ul>
+                </div>
+                
+                <div class="dashboard-content">
+                    <!-- Analytics Tab -->
+                    <div id="analytics-tab" class="admin-tab-content active">
+                        <h3>Business Analytics</h3>
+                        <div class="chart-container">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                            <div class="chart-container">
+                                <canvas id="moviesChart"></canvas>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="seatsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Cinema Management Tab -->
+                    <div id="cinema-management-tab" class="admin-tab-content">
+                        <div class="d-flex justify-between align-center mb-3">
+                            <h3>Cinema Management</h3>
+                            <button class="btn btn-primary" id="add-cinema-btn">
+                                <i class="fas fa-plus"></i> Add Cinema
+                            </button>
+                        </div>
+                        
+                        <div class="cinema-cards" id="admin-cinema-container">
+                            <!-- Cinemas will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Movies Management Tab -->
+                    <div id="movies-management-tab" class="admin-tab-content">
+                        <div class="d-flex justify-between align-center mb-3">
+                            <h3>Movies Management</h3>
+                            <button class="btn btn-primary" id="add-movie-btn">
+                                <i class="fas fa-plus"></i> Add Movie
+                            </button>
+                        </div>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Genre</th>
+                                    <th>Duration</th>
+                                    <th>Rating</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-movies-table">
+                                <!-- Movies will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Showtimes Management Tab -->
+                    <div id="showtimes-management-tab" class="admin-tab-content">
+                        <div class="d-flex justify-between align-center mb-3">
+                            <h3>Showtimes Management</h3>
+                            <button class="btn btn-primary" id="add-showtime-btn">
+                                <i class="fas fa-plus"></i> Add Showtime
+                            </button>
+                        </div>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Movie</th>
+                                    <th>Cinema</th>
+                                    <th>Date & Time</th>
+                                    <th>Available Seats</th>
+                                    <th>Price</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-showtimes-table">
+                                <!-- Showtimes will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Bookings Management Tab -->
+                    <div id="bookings-management-tab" class="admin-tab-content">
+                        <h3>Bookings Management</h3>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Booking ID</th>
+                                    <th>User</th>
+                                    <th>Movie</th>
+                                    <th>Cinema</th>
+                                    <th>Date</th>
+                                    <th>Seats</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-bookings-table">
+                                <!-- Bookings will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Users Management Tab -->
+                    <div id="users-management-tab" class="admin-tab-content">
+                        <h3>Users Management</h3>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>User ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Role</th>
+                                    <th>Bookings</th>
+                                    <th>Joined</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-users-table">
+                                <!-- Users will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Super Admin Dashboard View -->
+        <div id="super-admin-dashboard-view" class="view">
+            <h2 class="section-title">Super Admin Dashboard</h2>
+            
+            <div class="cards-grid mb-3">
+                <div class="card stats-card">
+                    <div class="card-header">
+                        <i class="fas fa-ticket-alt"></i> Total Bookings
+                    </div>
+                    <div class="card-body">
+                        <div class="stats-value" id="super-admin-total-bookings">0</div>
+                        <div class="stats-label">All-time bookings</div>
+                    </div>
+                </div>
+                <div class="card stats-card">
+                    <div class="card-header">
+                        <i class="fas fa-dollar-sign"></i> Total Revenue
+                    </div>
+                    <div class="card-body">
+                        <div class="stats-value" id="super-admin-total-revenue">$0</div>
+                        <div class="stats-label">All-time revenue</div>
+                    </div>
+                </div>
+                <div class="card stats-card">
+                    <div class="card-header">
+                        <i class="fas fa-users"></i> Total Users
+                    </div>
+                    <div class="card-body">
+                        <div class="stats-value" id="super-admin-total-users">0</div>
+                        <div class="stats-label">Registered users</div>
+                    </div>
+                </div>
+                <div class="card stats-card">
+                    <div class="card-header">
+                        <i class="fas fa-user-shield"></i> Pending Admins
+                    </div>
+                    <div class="card-body">
+                        <div class="stats-value" id="super-admin-pending-admins">0</div>
+                        <div class="stats-label">Awaiting approval</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard">
+                <div class="sidebar">
+                    <ul class="sidebar-menu">
+                        <li><a href="#" class="admin-tab active" data-tab="super-analytics"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+                        <li><a href="#" class="admin-tab" data-tab="admin-approval"><i class="fas fa-user-check"></i> Admin Approval</a></li>
+                        <li><a href="#" class="admin-tab" data-tab="super-cinema-management"><i class="fas fa-building"></i> Cinema Management</a></li>
+                        <li><a href="#" class="admin-tab" data-tab="super-movies-management"><i class="fas fa-film"></i> Movies</a></li>
+                        <li><a href="#" class="admin-tab" data-tab="super-showtimes-management"><i class="fas fa-clock"></i> Showtimes</a></li>
+                        <li><a href="#" class="admin-tab" data-tab="super-bookings-management"><i class="fas fa-ticket-alt"></i> Bookings</a></li>
+                        <li><a href="#" class="admin-tab" data-tab="super-users-management"><i class="fas fa-users"></i> Users</a></li>
+                    </ul>
+                </div>
+                
+                <div class="dashboard-content">
+                    <!-- Super Analytics Tab -->
+                    <div id="super-analytics-tab" class="admin-tab-content active">
+                        <h3>Business Analytics</h3>
+                        <div class="chart-container">
+                            <canvas id="super-revenueChart"></canvas>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                            <div class="chart-container">
+                                <canvas id="super-moviesChart"></canvas>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="super-seatsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Admin Approval Tab -->
+                    <div id="admin-approval-tab" class="admin-tab-content">
+                        <h3>Admin Approval Requests</h3>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>User ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Cinema</th>
+                                    <th>Request Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-approval-table">
+                                <!-- Admin requests will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Super Cinema Management Tab -->
+                    <div id="super-cinema-management-tab" class="admin-tab-content">
+                        <div class="d-flex justify-between align-center mb-3">
+                            <h3>Cinema Management</h3>
+                            <button class="btn btn-primary" id="super-add-cinema-btn">
+                                <i class="fas fa-plus"></i> Add Cinema
+                            </button>
+                        </div>
+                        
+                        <div class="cinema-cards" id="super-cinema-container">
+                            <!-- Cinemas will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Super Movies Management Tab -->
+                    <div id="super-movies-management-tab" class="admin-tab-content">
+                        <div class="d-flex justify-between align-center mb-3">
+                            <h3>Movies Management</h3>
+                            <button class="btn btn-primary" id="super-add-movie-btn">
+                                <i class="fas fa-plus"></i> Add Movie
+                            </button>
+                        </div>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Genre</th>
+                                    <th>Duration</th>
+                                    <th>Rating</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="super-admin-movies-table">
+                                <!-- Movies will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Super Showtimes Management Tab -->
+                    <div id="super-showtimes-management-tab" class="admin-tab-content">
+                        <div class="d-flex justify-between align-center mb-3">
+                            <h3>Showtimes Management</h3>
+                            <button class="btn btn-primary" id="super-add-showtime-btn">
+                                <i class="fas fa-plus"></i> Add Showtime
+                            </button>
+                        </div>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Movie</th>
+                                    <th>Cinema</th>
+                                    <th>Date & Time</th>
+                                    <th>Available Seats</th>
+                                    <th>Price</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="super-admin-showtimes-table">
+                                <!-- Showtimes will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Super Bookings Management Tab -->
+                    <div id="super-bookings-management-tab" class="admin-tab-content">
+                        <h3>Bookings Management</h3>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Booking ID</th>
+                                    <th>User</th>
+                                    <th>Movie</th>
+                                    <th>Cinema</th>
+                                    <th>Date</th>
+                                    <th>Seats</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="super-admin-bookings-table">
+                                <!-- Bookings will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Super Users Management Tab -->
+                    <div id="super-users-management-tab" class="admin-tab-content">
+                        <h3>Users Management</h3>
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>User ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Role</th>
+                                    <th>Bookings</th>
+                                    <th>Joined</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="super-admin-users-table">
+                                <!-- Users will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Authentication Views -->
+        <div id="login-view" class="view">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <h2 class="auth-title">Login to Your Account</h2>
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label class="form-label" for="login-email">Email</label>
+                            <input type="email" class="form-control" id="login-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="login-password">Password</label>
+                            <input type="password" class="form-control" id="login-password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+                    </form>
+                    <div class="auth-switch">
+                        Don't have an account? <a href="#" id="switch-to-register">Register here</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="register-view" class="view">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <h2 class="auth-title">Create an Account</h2>
+                    <form id="register-form">
+                        <div class="form-group">
+                            <label class="form-label" for="register-name">Full Name</label>
+                            <input type="text" class="form-control" id="register-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="register-email">Email</label>
+                            <input type="email" class="form-control" id="register-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="register-phone">Phone</label>
+                            <input type="tel" class="form-control" id="register-phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="register-password">Password</label>
+                            <input type="password" class="form-control" id="register-password" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="register-confirm-password">Confirm Password</label>
+                            <input type="password" class="form-control" id="register-confirm-password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Register</button>
+                    </form>
+                    <div class="auth-switch">
+                        Already have an account? <a href="#" id="switch-to-login">Login here</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Movie Modal -->
+    <div id="add-movie-modal" class="modal d-none">
+        <div class="auth-card" style="max-width: 800px;">
+            <h2 class="auth-title">Add New Movie</h2>
+            <form id="add-movie-form">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label" for="movie-title">Movie Title</label>
+                        <input type="text" class="form-control" id="movie-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="movie-director">Director</label>
+                        <input type="text" class="form-control" id="movie-director" required>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label" for="movie-genre">Genre</label>
+                        <select class="form-control" id="movie-genre" required>
+                            <option value="">Select Genre</option>
+                            <option value="action">Action</option>
+                            <option value="comedy">Comedy</option>
+                            <option value="drama">Drama</option>
+                            <option value="sci-fi">Sci-Fi</option>
+                            <option value="horror">Horror</option>
+                            <option value="romance">Romance</option>
+                            <option value="thriller">Thriller</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="movie-language">Language</label>
+                        <select class="form-control" id="movie-language" required>
+                            <option value="">Select Language</option>
+                            <option value="english">English</option>
+                            <option value="spanish">Spanish</option>
+                            <option value="engwspa">English with Spanish</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label" for="movie-duration">Duration (minutes)</label>
+                        <input type="number" class="form-control" id="movie-duration" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="movie-rating">Rating</label>
+                        <input type="number" class="form-control" id="movie-rating" min="0" max="10" step="0.1" required>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label" for="movie-release-date">Release Date</label>
+                        <input type="date" class="form-control" id="movie-release-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="movie-end-date">End Date</label>
+                        <input type="date" class="form-control" id="movie-end-date" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="movie-cast">Cast (comma separated)</label>
+                    <input type="text" class="form-control" id="movie-cast" placeholder="Actor 1, Actor 2, Actor 3" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="movie-description">Description</label>
+                    <textarea class="form-control" id="movie-description" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="movie-poster">Poster URL</label>
+                    <input type="url" class="form-control" id="movie-poster" required>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Add Movie</button>
+                    <button type="button" class="btn btn-outline" style="flex: 1;" id="cancel-add-movie">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Showtime Modal -->
+    <div id="add-showtime-modal" class="modal d-none">
+        <div class="auth-card" style="max-width: 600px;">
+            <h2 class="auth-title">Add New Showtime</h2>
+            <form id="add-showtime-form">
+                <div class="form-group">
+                    <label class="form-label" for="showtime-movie">Movie</label>
+                    <select class="form-control" id="showtime-movie" required>
+                        <option value="">Select Movie</option>
+                        <!-- Movies will be populated by JavaScript -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="showtime-cinema">Cinema</label>
+                    <select class="form-control" id="showtime-cinema" required>
+                        <option value="">Select Cinema</option>
+                        <!-- Cinemas will be populated by JavaScript -->
+                    </select>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label" for="showtime-date">Date</label>
+                        <input type="date" class="form-control" id="showtime-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="showtime-time">Time</label>
+                        <input type="time" class="form-control" id="showtime-time" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="showtime-price">Ticket Price ($)</label>
+                    <input type="number" class="form-control" id="showtime-price" min="5" max="50" step="0.5" required>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Add Showtime</button>
+                    <button type="button" class="btn btn-outline" style="flex: 1;" id="cancel-add-showtime">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Cinema Modal -->
+    <div id="add-cinema-modal" class="modal d-none">
+        <div class="auth-card" style="max-width: 600px;">
+            <h2 class="auth-title">Add New Cinema</h2>
+            <form id="add-cinema-form">
+                <div class="form-group">
+                    <label class="form-label" for="cinema-name">Cinema Name</label>
+                    <input type="text" class="form-control" id="cinema-name" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="cinema-location">Location</label>
+                    <input type="text" class="form-control" id="cinema-location" required>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label" for="cinema-screens">Number of Screens</label>
+                        <input type="number" class="form-control" id="cinema-screens" min="1" max="20" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="cinema-capacity">Seating Capacity</label>
+                        <input type="number" class="form-control" id="cinema-capacity" min="50" max="500" required>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label" for="cinema-rows">Number of Rows</label>
+                        <input type="number" class="form-control" id="cinema-rows" min="5" max="20" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="cinema-columns">Seats per Row</label>
+                        <input type="number" class="form-control" id="cinema-columns" min="5" max="20" required>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Add Cinema</button>
+                    <button type="button" class="btn btn-outline" style="flex: 1;" id="cancel-add-cinema">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Application State
+        const state = {
+            currentUser: null,
+            currentView: 'home',
+            movies: [],
+            cinemas: [],
+            showtimes: [],
+            bookings: [],
+            users: [],
+            adminRequests: [],
+            currentBooking: {
+                movie: null,
+                cinema: null,
+                showtime: null,
+                seats: [],
+                total: 0
+            },
+            carouselPositions: {
+                nowShowing: 0,
+                comingSoon: 0
+            }
+        };
+
+        // TMDb API Configuration
+       
+        ///its in gitignore
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            setupEventListeners();
+            loadSampleData();
+            fetchMoviesFromAPI();
+            renderCinemas();
+            updateUI();
+            
+            // Show only the home view initially
+            showView('home');
+        });
+
+        function initializeApp() {
+            // Load data from localStorage if available
+            const savedMovies = localStorage.getItem('movies');
+            const savedShowtimes = localStorage.getItem('showtimes');
+            const savedBookings = localStorage.getItem('bookings');
+            const savedUsers = localStorage.getItem('users');
+            const savedCurrentUser = localStorage.getItem('currentUser');
+            const savedCinemas = localStorage.getItem('cinemas');
+            const savedAdminRequests = localStorage.getItem('adminRequests');
+
+            if (savedMovies) state.movies = JSON.parse(savedMovies);
+            if (savedShowtimes) state.showtimes = JSON.parse(savedShowtimes);
+            if (savedBookings) state.bookings = JSON.parse(savedBookings);
+            if (savedUsers) state.users = JSON.parse(savedUsers);
+            if (savedCurrentUser) state.currentUser = JSON.parse(savedCurrentUser);
+            if (savedCinemas) state.cinemas = JSON.parse(savedCinemas);
+            if (savedAdminRequests) state.adminRequests = JSON.parse(savedAdminRequests);
+        }
+
+        async function fetchMoviesFromAPI() {
+            try {
+                // Show loading state
+                document.getElementById('movies-loading').classList.remove('d-none');
+                document.getElementById('movies-grid').innerHTML = '';
+                
+                // Fetch popular movies from TMDb API
+                const response = await fetch(`${TMDB_BASE_URL}/movie/popular?api_key=${TMDB_API_KEY}&language=en-US&page=1`);
+                const data = await response.json();
+                
+                // Transform TMDb data to our format
+                const movies = data.results.map(movie => ({
+                    id: movie.id,
+                    title: movie.title,
+                    cast: [], // We'll fetch cast separately if needed
+                    director: '', // Not available in this endpoint
+                    genre: movie.genre_ids && movie.genre_ids.length > 0 ? movie.genre_ids[0] : '',
+                    language: movie.original_language,
+                    duration: Math.floor(Math.random() * 60) + 90, // Random duration for demo
+                    rating: movie.vote_average,
+                    description: movie.overview,
+                    poster: `${TMDB_IMAGE_BASE_URL}${movie.poster_path}`,
+                    releaseDate: movie.release_date,
+                    endDate: new Date(new Date(movie.release_date).getTime() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 30 days after release
+                    status: new Date(movie.release_date) <= new Date() ? 'now-showing' : 'coming-soon'
+                }));
+                
+                // Add to state
+                state.movies = [...state.movies, ...movies];
+                saveDataToStorage();
+                
+                // Render movies
+                renderMovies();
+                renderCarousels();
+                
+                // Hide loading state
+                document.getElementById('movies-loading').classList.add('d-none');
+            } catch (error) {
+                console.error('Error fetching movies from TMDb:', error);
+                document.getElementById('movies-loading').innerHTML = '<p>Error loading movies. Please try again later.</p>';
+            }
+        }
+
+        async function fetchMovieDetails(movieId) {
+            try {
+                // Show loading state
+                document.getElementById('movie-details-loading').classList.remove('d-none');
+                document.getElementById('movie-details-content').classList.add('d-none');
+                
+                // Fetch movie details from TMDb API
+                const response = await fetch(`${TMDB_BASE_URL}/movie/${movieId}?api_key=${TMDB_API_KEY}&language=en-US`);
+                const movie = await response.json();
+                
+                // Fetch movie credits for cast and director
+                const creditsResponse = await fetch(`${TMDB_BASE_URL}/movie/${movieId}/credits?api_key=${TMDB_API_KEY}`);
+                const credits = await creditsResponse.json();
+                
+                // Find director
+                const director = credits.crew.find(person => person.job === 'Director');
+                
+                // Get top 5 cast members
+                const cast = credits.cast.slice(0, 5).map(person => person.name);
+                
+                // Update movie details
+                document.getElementById('movie-detail-title').textContent = movie.title;
+                document.getElementById('movie-detail-name').textContent = movie.title;
+                document.getElementById('movie-detail-poster').src = `${TMDB_IMAGE_BASE_URL}${movie.poster_path}`;
+                document.getElementById('movie-detail-genre').textContent = movie.genres && movie.genres.length > 0 ? movie.genres[0].name : 'Unknown';
+                document.getElementById('movie-detail-duration').textContent = `${movie.runtime || 120} min`;
+                document.getElementById('movie-detail-rating').textContent = movie.vote_average;
+                document.getElementById('movie-detail-release-date').textContent = new Date(movie.release_date).toLocaleDateString();
+                document.getElementById('movie-detail-description').textContent = movie.overview;
+                document.getElementById('movie-director').textContent = director ? director.name : 'Unknown';
+                
+                // Render cast
+                const castList = document.getElementById('movie-cast-list');
+                if (castList) {
+                    castList.innerHTML = cast.map(actor => `
+                        <div class="cast-member">
+                            <div class="cast-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="cast-name">${actor}</div>
+                            <div class="cast-role">Actor</div>
+                        </div>
+                    `).join('');
+                }
+                
+                // Hide loading state and show content
+                document.getElementById('movie-details-loading').classList.add('d-none');
+                document.getElementById('movie-details-content').classList.remove('d-none');
+                
+            } catch (error) {
+                console.error('Error fetching movie details from TMDb:', error);
+                document.getElementById('movie-details-loading').innerHTML = '<p>Error loading movie details. Please try again later.</p>';
+            }
+        }
+
+        function setupEventListeners() {
+            // Navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const view = this.getAttribute('data-view');
+                    showView(view);
+                });
+            });
+
+            // Auth buttons
+            document.getElementById('loginBtn').addEventListener('click', () => showView('login'));
+            document.getElementById('registerBtn').addEventListener('click', () => showView('register'));
+            document.getElementById('logoutBtn').addEventListener('click', logout);
+            document.getElementById('adminBtn').addEventListener('click', () => showView('admin-dashboard'));
+            document.getElementById('superAdminBtn').addEventListener('click', () => showView('super-admin-dashboard'));
+
+            // Auth forms
+            document.getElementById('login-form').addEventListener('submit', handleLogin);
+            document.getElementById('register-form').addEventListener('submit', handleRegister);
+            document.getElementById('switch-to-register').addEventListener('click', (e) => {
+                e.preventDefault();
+                showView('register');
+            });
+            document.getElementById('switch-to-login').addEventListener('click', (e) => {
+                e.preventDefault();
+                showView('login');
+            });
+
+            // Back buttons
+            document.getElementById('back-to-movies').addEventListener('click', () => showView('movies'));
+            document.getElementById('back-to-movie-details').addEventListener('click', () => {
+                if (state.currentBooking.movie) {
+                    showMovieDetails(state.currentBooking.movie.id);
+                } else {
+                    showView('movies');
+                }
+            });
+
+            // Booking
+            document.getElementById('confirm-booking').addEventListener('click', confirmBooking);
+
+            // Admin tabs
+            document.querySelectorAll('.admin-tab').forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const tabId = this.getAttribute('data-tab');
+                    const dashboardType = this.closest('.dashboard-content') ? 
+                        (this.closest('.dashboard-content').parentElement.id === 'super-admin-dashboard-view' ? 'super' : 'admin') : 'admin';
+                    showAdminTab(tabId, dashboardType);
+                });
+            });
+
+            // Admin buttons
+            document.getElementById('add-movie-btn').addEventListener('click', () => {
+                document.getElementById('add-movie-modal').classList.remove('d-none');
+            });
+            document.getElementById('cancel-add-movie').addEventListener('click', () => {
+                document.getElementById('add-movie-modal').classList.add('d-none');
+            });
+            document.getElementById('add-movie-form').addEventListener('submit', handleAddMovie);
+
+            document.getElementById('add-showtime-btn').addEventListener('click', () => {
+                document.getElementById('add-showtime-modal').classList.remove('d-none');
+                populateMoviesDropdown();
+                populateCinemasDropdown();
+            });
+            document.getElementById('cancel-add-showtime').addEventListener('click', () => {
+                document.getElementById('add-showtime-modal').classList.add('d-none');
+            });
+            document.getElementById('add-showtime-form').addEventListener('submit', handleAddShowtime);
+
+            document.getElementById('add-cinema-btn').addEventListener('click', () => {
+                document.getElementById('add-cinema-modal').classList.remove('d-none');
+            });
+            document.getElementById('cancel-add-cinema').addEventListener('click', () => {
+                document.getElementById('add-cinema-modal').classList.add('d-none');
+            });
+            document.getElementById('add-cinema-form').addEventListener('submit', handleAddCinema);
+
+            // Super Admin buttons
+            document.getElementById('super-add-movie-btn').addEventListener('click', () => {
+                document.getElementById('add-movie-modal').classList.remove('d-none');
+            });
+            document.getElementById('super-add-showtime-btn').addEventListener('click', () => {
+                document.getElementById('add-showtime-modal').classList.remove('d-none');
+                populateMoviesDropdown();
+                populateCinemasDropdown();
+            });
+            document.getElementById('super-add-cinema-btn').addEventListener('click', () => {
+                document.getElementById('add-cinema-modal').classList.remove('d-none');
+            });
+
+            // Filters
+            document.getElementById('genre-filter').addEventListener('change', renderMovies);
+            document.getElementById('language-filter').addEventListener('change', renderMovies);
+            document.getElementById('search-movies').addEventListener('input', renderMovies);
+
+            // Carousel controls
+            document.getElementById('carousel-prev').addEventListener('click', () => moveCarousel('nowShowing', -1));
+            document.getElementById('carousel-next').addEventListener('click', () => moveCarousel('nowShowing', 1));
+            document.getElementById('coming-soon-prev').addEventListener('click', () => moveCarousel('comingSoon', -1));
+            document.getElementById('coming-soon-next').addEventListener('click', () => moveCarousel('comingSoon', 1));
+                // Add event listeners for carousel buttons
+    document.getElementById('carousel-prev').addEventListener('click', () => moveCarousel('nowShowing', -1));
+    document.getElementById('carousel-next').addEventListener('click', () => moveCarousel('nowShowing', 1));
+    document.getElementById('coming-soon-prev').addEventListener('click', () => moveCarousel('comingSoon', -1));
+    document.getElementById('coming-soon-next').addEventListener('click', () => moveCarousel('comingSoon', 1));
+    
+    // Add event listener for confirm booking button
+    document.getElementById('confirm-booking').addEventListener('click', confirmBooking);
+document.getElementById('confirm-booking').addEventListener('click', confirmBooking);
+    
+    // Add event listeners for carousel buttons
+    document.getElementById('carousel-prev').addEventListener('click', () => moveCarousel('nowShowing', -1));
+    document.getElementById('carousel-next').addEventListener('click', () => moveCarousel('nowShowing', 1));
+    document.getElementById('coming-soon-prev').addEventListener('click', () => moveCarousel('comingSoon', -1));
+    document.getElementById('coming-soon-next').addEventListener('click', () => moveCarousel('comingSoon', 1));
+}
+
+// Fix the renderCarousels function to properly handle button clicks
+function renderCarousels() {
+    // Now Showing Carousel
+    const nowShowingContainer = document.getElementById('now-showing-carousel');
+    const nowShowingMovies = state.movies.filter(movie => {
+        const releaseDate = new Date(movie.releaseDate);
+        const today = new Date();
+        return releaseDate <= today;
+    });
+    
+    nowShowingContainer.innerHTML = nowShowingMovies.slice(0, 8).map(movie => `
+        <div class="carousel-item">
+            <div class="card movie-card">
+                <img src="${movie.poster}" alt="${movie.title}" class="movie-poster">
+                <div class="movie-info">
+                    <h3 class="movie-title">${movie.title}</h3>
+                    <div class="movie-meta">
+                        <span>${getGenreName(movie.genre)}</span>
+                        <span class="movie-rating">⭐ ${movie.rating}</span>
+                    </div>
+                    <button class="btn btn-primary book-now-btn" data-id="${movie.id}">Book Tickets</button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+
+    // Coming Soon Carousel
+    const comingSoonContainer = document.getElementById('coming-soon-carousel');
+    const comingSoonMovies = state.movies.filter(movie => {
+        const releaseDate = new Date(movie.releaseDate);
+        const today = new Date();
+        return releaseDate > today;
+    });
+    
+    comingSoonContainer.innerHTML = comingSoonMovies.slice(0, 8).map(movie => `
+        <div class="carousel-item">
+            <div class="card movie-card">
+                <img src="${movie.poster}" alt="${movie.title}" class="movie-poster">
+                <div class="movie-info">
+                    <h3 class="movie-title">${movie.title}</h3>
+                    <div class="movie-meta">
+                        <span>${getGenreName(movie.genre)}</span>
+                        <span class="movie-rating">⭐ ${movie.rating}</span>
+                    </div>
+                    <button class="btn btn-outline view-details-btn" data-id="${movie.id}">View Details</button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+
+    // Add event listeners to carousel buttons
+    document.querySelectorAll('.book-now-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const movieId = parseInt(this.getAttribute('data-id'));
+            showMovieDetails(movieId);
+        });
+    });
+
+    document.querySelectorAll('.view-details-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const movieId = parseInt(this.getAttribute('data-id'));
+            showMovieDetails(movieId);
+        });
+    });
+
+    // Set initial carousel positions
+    updateCarouselPosition('nowShowing');
+    updateCarouselPosition('comingSoon');
+}
+
+// Fix the showMovieDetails function to properly handle showtime selection
+function showMovieDetails(movieId) {
+    const movie = state.movies.find(m => m.id === movieId);
+    if (!movie) return;
+
+    // Update movie details in the UI
+    document.getElementById('movie-detail-title').textContent = movie.title;
+    document.getElementById('movie-detail-name').textContent = movie.title;
+    document.getElementById('movie-detail-poster').src = movie.poster;
+    document.getElementById('movie-detail-genre').textContent = getGenreName(movie.genre);
+    document.getElementById('movie-detail-duration').textContent = `${movie.duration} min`;
+    document.getElementById('movie-detail-rating').textContent = movie.rating;
+    document.getElementById('movie-detail-release-date').textContent = new Date(movie.releaseDate).toLocaleDateString();
+    document.getElementById('movie-detail-description').textContent = movie.description;
+
+    // Render showtimes
+    const showtimesContainer = document.getElementById('showtimes-container');
+    const movieShowtimes = state.showtimes.filter(st => st.movieId === movieId);
+    
+    if (movieShowtimes.length === 0) {
+        showtimesContainer.innerHTML = '<p>No showtimes available for this movie.</p>';
+    } else {
+        showtimesContainer.innerHTML = movieShowtimes.map(showtime => {
+            const cinema = state.cinemas.find(c => c.id === showtime.cinemaId);
+            return `
+                <div class="card mb-2">
+                    <div class="card-body" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h5>${cinema.name}</h5>
+                            <p class="mb-0">${cinema.location}</p>
+                            <p class="mb-0">${showtime.date} at ${showtime.time}</p>
+                        </div>
+                        <div>
+                            <p class="mb-0">$${showtime.price}</p>
+                            <button class="btn btn-primary select-showtime-btn" data-showtime-id="${showtime.id}">Select</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        // Add event listeners to select showtime buttons
+        document.querySelectorAll('.select-showtime-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const showtimeId = parseInt(this.getAttribute('data-showtime-id'));
+                startBookingProcess(movie, showtimeId);
+            });
+        });
+    }
+
+    showView('movie-details');
+}
+
+// Fix the startBookingProcess function
+function startBookingProcess(movie, showtimeId) {
+    const showtime = state.showtimes.find(st => st.id === showtimeId);
+    const cinema = state.cinemas.find(c => c.id === showtime.cinemaId);
+
+    if (!state.currentUser) {
+        showNotification('Please login to book tickets', 'error');
+        showView('login');
+        return;
+    }
+
+    // Store current booking info
+    state.currentBooking.movie = movie;
+    state.currentBooking.showtime = showtime;
+    state.currentBooking.cinema = cinema;
+    state.currentBooking.seats = [];
+    state.currentBooking.total = 0;
+
+    // Update booking summary
+    document.getElementById('booking-movie-title').textContent = `${movie.title} - ${cinema.name}`;
+    document.getElementById('summary-movie').textContent = movie.title;
+    document.getElementById('summary-cinema').textContent = cinema.name;
+    document.getElementById('summary-showtime').textContent = `${showtime.date} at ${showtime.time}`;
+    document.getElementById('summary-price').textContent = `$${showtime.price}`;
+
+    // Reset summary
+    document.getElementById('summary-seats').textContent = 'None selected';
+    document.getElementById('summary-tickets').textContent = '0';
+    document.getElementById('summary-total').textContent = '$0';
+
+    // Render seats
+    renderSeats();
+
+    showView('booking');
+}
+
+// Fix the renderSeats function
+function renderSeats() {
+    const container = document.getElementById('seats-container');
+    const cinema = state.currentBooking.cinema;
+    const showtime = state.currentBooking.showtime;
+    const rows = cinema.rows;
+    const cols = cinema.columns;
+    
+    let seatsHTML = '';
+    
+    // Create seat layout
+    for (let i = 0; i < rows; i++) {
+        const rowLetter = String.fromCharCode(65 + i); // A, B, C, ...
+        seatsHTML += '<div class="seat-row">';
+        for (let j = 1; j <= cols; j++) {
+            const seatId = `${rowLetter}${j}`;
+            const isOccupied = showtime.bookedSeats && showtime.bookedSeats.includes(seatId);
+            const isVip = i < 2; // First two rows are VIP
+            
+            let seatClass = 'seat';
+            if (isOccupied) seatClass += ' occupied';
+            if (isVip) seatClass += ' vip';
+            if (state.currentBooking.seats.includes(seatId)) seatClass += ' selected';
+            
+            seatsHTML += `<div class="${seatClass}" data-seat="${seatId}">${seatId}</div>`;
+        }
+        seatsHTML += '</div>';
+    }
+    
+    container.innerHTML = seatsHTML;
+    
+    // Add event listeners to seats
+    document.querySelectorAll('.seat:not(.occupied)').forEach(seat => {
+        seat.addEventListener('click', function() {
+            const seatId = this.getAttribute('data-seat');
+            toggleSeatSelection(seatId);
+        });
+    });
+}
+
+// Fix the toggleSeatSelection function
+function toggleSeatSelection(seatId) {
+    const index = state.currentBooking.seats.indexOf(seatId);
+    if (index === -1) {
+        // Add seat
+        state.currentBooking.seats.push(seatId);
+    } else {
+        // Remove seat
+        state.currentBooking.seats.splice(index, 1);
+    }
+    
+    // Update UI
+    const seatElement = document.querySelector(`.seat[data-seat="${seatId}"]`);
+    if (seatElement) {
+        seatElement.classList.toggle('selected');
+    }
+    
+    // Update booking summary
+    updateBookingSummary();
+}
+
+// Fix the updateBookingSummary function
+function updateBookingSummary() {
+    const seatsCount = state.currentBooking.seats.length;
+    const price = state.currentBooking.showtime.price;
+    const total = seatsCount * price;
+    
+    state.currentBooking.total = total;
+    
+    document.getElementById('summary-seats').textContent = state.currentBooking.seats.join(', ') || 'None selected';
+    document.getElementById('summary-tickets').textContent = seatsCount;
+    document.getElementById('summary-total').textContent = `$${total.toFixed(2)}`;
+}
+
+// Fix the confirmBooking function
+function confirmBooking() {
+    if (state.currentBooking.seats.length === 0) {
+        showNotification('Please select at least one seat', 'error');
+        return;
+    }
+    
+    // Create new booking
+    const newBooking = {
+        id: Date.now(),
+        userId: state.currentUser.id,
+        showtimeId: state.currentBooking.showtime.id,
+        seats: [...state.currentBooking.seats],
+        total: state.currentBooking.total,
+        status: 'confirmed',
+        bookingDate: new Date().toISOString().split('T')[0]
+    };
+    
+    // Update showtime booked seats
+    const showtimeIndex = state.showtimes.findIndex(st => st.id === state.currentBooking.showtime.id);
+    if (showtimeIndex !== -1) {
+        // Initialize bookedSeats array if it doesn't exist
+        if (!state.showtimes[showtimeIndex].bookedSeats) {
+            state.showtimes[showtimeIndex].bookedSeats = [];
+        }
+        // Add the new booked seats
+        state.showtimes[showtimeIndex].bookedSeats.push(...state.currentBooking.seats);
+    }
+    
+    state.bookings.push(newBooking);
+    saveDataToStorage();
+    
+    showNotification(`Booking confirmed! Your booking ID is ${newBooking.id}. Total: $${newBooking.total.toFixed(2)}`, 'success');
+    
+    // Reset current booking
+    state.currentBooking = {
+        movie: null,
+        cinema: null,
+        showtime: null,
+        seats: [],
+        total: 0
+    };
+    
+    showView('user-dashboard');
+}
+
+// Fix the renderMovies function to properly handle button clicks
+function renderMovies() {
+    const container = document.getElementById('movies-grid');
+    const genreFilter = document.getElementById('genre-filter').value;
+    const languageFilter = document.getElementById('language-filter').value;
+    const searchQuery = document.getElementById('search-movies').value.toLowerCase();
+
+    let filteredMovies = state.movies;
+
+    if (genreFilter) {
+        filteredMovies = filteredMovies.filter(movie => movie.genre == genreFilter);
+    }
+
+    if (languageFilter) {
+        filteredMovies = filteredMovies.filter(movie => movie.language === languageFilter);
+    }
+
+    if (searchQuery) {
+        filteredMovies = filteredMovies.filter(movie => 
+            movie.title.toLowerCase().includes(searchQuery) || 
+            movie.description.toLowerCase().includes(searchQuery)
+        );
+    }
+
+    container.innerHTML = filteredMovies.map(movie => `
+        <div class="card movie-card">
+            <img src="${movie.poster}" alt="${movie.title}" class="movie-poster">
+            <div class="movie-info">
+                <h3 class="movie-title">${movie.title}</h3>
+                <div class="movie-meta">
+                    <span>${getGenreName(movie.genre)}</span>
+                    <span class="movie-rating">⭐ ${movie.rating}</span>
+                </div>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">${movie.description.substring(0, 100)}...</p>
+                <button class="btn btn-primary view-details-movie-btn" data-id="${movie.id}">View Details & Book</button>
+            </div>
+        </div>
+    `).join('');
+
+    // Add event listeners to book buttons
+    document.querySelectorAll('.view-details-movie-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const movieId = parseInt(this.getAttribute('data-id'));
+            showMovieDetails(movieId);
+        });
+    });
+}
+
+// Also fix the loadSampleData function to ensure showtimes have proper dates
+function loadSampleData() {
+    // ... existing code ...
+    
+    if (state.showtimes.length === 0) {
+        // Use current dates for showtimes
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        
+        state.showtimes = [
+            { 
+                id: 1, 
+                movieId: 436270, // Black Adam
+                cinemaId: 'cinema-1', 
+                date: today.toISOString().split('T')[0],
+                time: '14:30', 
+                price: 12.5,
+                bookedSeats: ['A1', 'A2', 'B5', 'C3']
+            },
+            { 
+                id: 2, 
+                movieId: 436270, // Black Adam
+                cinemaId: 'cinema-2', 
+                date: today.toISOString().split('T')[0],
+                time: '18:00', 
+                price: 14.5,
+                bookedSeats: ['A3', 'B2']
+            },
+            { 
+                id: 3, 
+                movieId: 76600, // Avatar: The Way of Water
+                cinemaId: 'cinema-1', 
+                date: tomorrow.toISOString().split('T')[0],
+                time: '16:00', 
+                price: 13.0,
+                bookedSeats: ['A1', 'A2', 'B1', 'B2', 'C1']
+            },
+            { 
+                id: 4, 
+                movieId: 76600, // Avatar: The Way of Water
+                cinemaId: 'cinema-3', 
+                date: tomorrow.toISOString().split('T')[0],
+                time: '20:30', 
+                price: 15.0,
+                bookedSeats: ['A4', 'B3']
+            }
+        ];
+    }
+}
+        function saveDataToStorage() {
+            localStorage.setItem('movies', JSON.stringify(state.movies));
+            localStorage.setItem('showtimes', JSON.stringify(state.showtimes));
+            localStorage.setItem('bookings', JSON.stringify(state.bookings));
+            localStorage.setItem('users', JSON.stringify(state.users));
+            localStorage.setItem('currentUser', JSON.stringify(state.currentUser));
+            localStorage.setItem('cinemas', JSON.stringify(state.cinemas));
+            localStorage.setItem('adminRequests', JSON.stringify(state.adminRequests));
+        }
+
+        function showView(viewName) {
+            // Hide all views
+            document.querySelectorAll('.view').forEach(view => {
+                view.classList.remove('active');
+            });
+
+            // Show the selected view
+            document.getElementById(`${viewName}-view`).classList.add('active');
+
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            if (viewName !== 'login' && viewName !== 'register' && viewName !== 'movie-details' && viewName !== 'booking' && 
+                viewName !== 'admin-dashboard' && viewName !== 'super-admin-dashboard') {
+                const activeLink = document.querySelector(`.nav-link[data-view="${viewName}"]`);
+                if (activeLink) activeLink.classList.add('active');
+            }
+
+            // Update state
+            state.currentView = viewName;
+
+            // Render specific content for the view
+            switch(viewName) {
+                case 'home':
+                    renderCarousels();
+                    break;
+                case 'movies':
+                    renderMovies();
+                    break;
+                case 'cinemas':
+                    renderCinemas();
+                    break;
+                case 'user-dashboard':
+                    renderUserDashboard();
+                    break;
+                case 'admin-dashboard':
+                    renderAdminDashboard();
+                    break;
+                case 'super-admin-dashboard':
+                    renderSuperAdminDashboard();
+                    break;
+            }
+        }
+
+        function renderCarousels() {
+            // Now Showing Carousel
+            const nowShowingContainer = document.getElementById('now-showing-carousel');
+            const nowShowingMovies = state.movies.filter(movie => movie.status === 'now-showing');
+            
+            nowShowingContainer.innerHTML = nowShowingMovies.slice(0, 8).map(movie => `
+                <div class="carousel-item">
+                    <div class="card movie-card" data-id="${movie.id}">
+                        <img src="${movie.poster}" alt="${movie.title}" class="movie-poster">
+                        <div class="movie-info">
+                            <h3 class="movie-title">${movie.title}</h3>
+                            <div class="movie-meta">
+                                <span>${getGenreName(movie.genre)}</span>
+                                <span class="movie-rating">⭐ ${movie.rating}</span>
+                            </div>
+                            <button class="btn btn-primary" style="width: 100%;" data-id="${movie.id}">Book Tickets</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Coming Soon Carousel
+            const comingSoonContainer = document.getElementById('coming-soon-carousel');
+            const comingSoonMovies = state.movies.filter(movie => movie.status === 'coming-soon');
+            
+            comingSoonContainer.innerHTML = comingSoonMovies.slice(0, 8).map(movie => `
+                <div class="carousel-item">
+                    <div class="card movie-card" data-id="${movie.id}">
+                        <img src="${movie.poster}" alt="${movie.title}" class="movie-poster">
+                        <div class="movie-info">
+                            <h3 class="movie-title">${movie.title}</h3>
+                            <div class="movie-meta">
+                                <span>${getGenreName(movie.genre)}</span>
+                                <span class="movie-rating">⭐ ${movie.rating}</span>
+                            </div>
+                            <button class="btn btn-outline" style="width: 100%;" data-id="${movie.id}">View Details</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Add event listeners to carousel buttons
+            nowShowingContainer.querySelectorAll('.btn-primary').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const movieId = parseInt(this.getAttribute('data-id'));
+                    showMovieDetails(movieId);
+                });
+            });
+
+            comingSoonContainer.querySelectorAll('.btn-outline').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const movieId = parseInt(this.getAttribute('data-id'));
+                    showMovieDetails(movieId);
+                });
+            });
+
+            // Set initial carousel positions
+            updateCarouselPosition('nowShowing');
+            updateCarouselPosition('comingSoon');
+        }
+
+        function getGenreName(genreId) {
+            const genres = {
+                28: 'Action',
+                35: 'Comedy',
+                18: 'Drama',
+                878: 'Science Fiction',
+                27: 'Horror',
+                10749: 'Romance',
+                53: 'Thriller'
+            };
+            return genres[genreId] || 'Unknown';
+        }
+
+        function moveCarousel(carouselType, direction) {
+    const carousel = document.getElementById(`${carouselType === 'nowShowing' ? 'now-showing' : 'coming-soon'}-carousel`);
+    const items = carousel.querySelectorAll('.carousel-item');
+    
+    state.carouselPositions[carouselType] += direction;
+    
+    // Boundary checks
+    const maxPosition = Math.max(0, items.length - 4); // Show 4 items at a time
+    if (state.carouselPositions[carouselType] < 0) {
+        state.carouselPositions[carouselType] = 0;
+    } else if (state.carouselPositions[carouselType] > maxPosition) {
+        state.carouselPositions[carouselType] = maxPosition;
+    }
+    
+    updateCarouselPosition(carouselType);
+}
+
+        function updateCarouselPosition(carouselType) {
+    const carousel = document.getElementById(`${carouselType === 'nowShowing' ? 'now-showing' : 'coming-soon'}-carousel`);
+    const items = carousel.querySelectorAll('.carousel-item');
+    const itemWidth = items[0] ? items[0].offsetWidth + 20 : 320; // width + gap
+    
+    carousel.style.transform = `translateX(-${state.carouselPositions[carouselType] * itemWidth}px)`;
+}
+
+        function renderMovies() {
+            const container = document.getElementById('movies-grid');
+            const genreFilter = document.getElementById('genre-filter').value;
+            const languageFilter = document.getElementById('language-filter').value;
+            const searchQuery = document.getElementById('search-movies').value.toLowerCase();
+
+            let filteredMovies = state.movies;
+
+            if (genreFilter) {
+                filteredMovies = filteredMovies.filter(movie => movie.genre == genreFilter);
+            }
+
+            if (languageFilter) {
+                filteredMovies = filteredMovies.filter(movie => movie.language === languageFilter);
+            }
+
+            if (searchQuery) {
+                filteredMovies = filteredMovies.filter(movie => 
+                    movie.title.toLowerCase().includes(searchQuery) || 
+                    movie.description.toLowerCase().includes(searchQuery)
+                );
+            }
+
+            container.innerHTML = filteredMovies.map(movie => `
+                <div class="card movie-card" data-id="${movie.id}">
+                    <img src="${movie.poster}" alt="${movie.title}" class="movie-poster">
+                    <div class="movie-info">
+                        <h3 class="movie-title">${movie.title}</h3>
+                        <div class="movie-meta">
+                            <span>${getGenreName(movie.genre)}</span>
+                            <span class="movie-rating">⭐ ${movie.rating}</span>
+                        </div>
+                        <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">${movie.description.substring(0, 100)}...</p>
+                        <button class="btn btn-primary" style="width: 100%;" data-id="${movie.id}">View Details & Book</button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Add event listeners to book buttons
+            container.querySelectorAll('.btn-primary').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const movieId = parseInt(this.getAttribute('data-id'));
+                    showMovieDetails(movieId);
+                });
+            });
+        }
+
+        function renderCinemas() {
+            const container = document.getElementById('cinemas-container');
+            
+            container.innerHTML = state.cinemas.map(cinema => `
+                <div class="cinema-card">
+                    <div class="cinema-name">${cinema.name}</div>
+                    <div class="cinema-location">${cinema.location}</div>
+                    <div class="cinema-stats">
+                        <div class="stat">
+                            <div class="stat-value">${cinema.screens}</div>
+                            <div class="stat-label">Screens</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${cinema.capacity}</div>
+                            <div class="stat-label">Capacity</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${Math.floor(Math.random() * 30) + 70}%</div>
+                            <div class="stat-label">Occupancy</div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary mt-3" style="width: 100%;" data-cinema-id="${cinema.id}">View Movies</button>
+                </div>
+            `).join('');
+
+            // Add event listeners to cinema buttons
+            container.querySelectorAll('.btn-primary').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const cinemaId = this.getAttribute('data-cinema-id');
+                    // In a real app, we would filter movies by cinema
+                    showView('movies');
+                });
+            });
+        }
+
+function showMovieDetails(movieId) {
+    const movie = state.movies.find(m => m.id === movieId);
+    if (!movie) return;
+
+    // Fetch detailed movie information from TMDb
+    fetchMovieDetails(movieId);
+
+    // Update movie details in the UI
+    document.getElementById('movie-detail-title').textContent = movie.title;
+    document.getElementById('movie-detail-name').textContent = movie.title;
+    document.getElementById('movie-detail-poster').src = movie.poster;
+    document.getElementById('movie-detail-genre').textContent = getGenreName(movie.genre);
+    document.getElementById('movie-detail-duration').textContent = `${movie.duration} min`;
+    document.getElementById('movie-detail-rating').textContent = movie.rating;
+    document.getElementById('movie-detail-release-date').textContent = new Date(movie.releaseDate).toLocaleDateString();
+    document.getElementById('movie-detail-description').textContent = movie.description;
+
+    // Render showtimes
+    const showtimesContainer = document.getElementById('showtimes-container');
+    const movieShowtimes = state.showtimes.filter(st => st.movieId === movieId);
+    
+    if (movieShowtimes.length === 0) {
+        showtimesContainer.innerHTML = '<p>No showtimes available for this movie.</p>';
+    } else {
+        showtimesContainer.innerHTML = movieShowtimes.map(showtime => {
+            const cinema = state.cinemas.find(c => c.id === showtime.cinemaId);
+            return `
+                <div class="card mb-2">
+                    <div class="card-body" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h5>${cinema.name}</h5>
+                            <p class="mb-0">${cinema.location}</p>
+                            <p class="mb-0">${showtime.date} at ${showtime.time}</p>
+                        </div>
+                        <div>
+                            <p class="mb-0">$${showtime.price}</p>
+                            <button class="btn btn-primary select-showtime" data-showtime-id="${showtime.id}">Select</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        // Add event listeners to select showtime buttons
+        showtimesContainer.querySelectorAll('.select-showtime').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const showtimeId = parseInt(this.getAttribute('data-showtime-id'));
+                startBookingProcess(movie, showtimeId);
+            });
+        });
+    }
+
+    showView('movie-details');
+}
+
+function startBookingProcess(movie, showtimeId) {
+    const showtime = state.showtimes.find(st => st.id === showtimeId);
+    const cinema = state.cinemas.find(c => c.id === showtime.cinemaId);
+
+    if (!state.currentUser) {
+        showNotification('Please login to book tickets', 'error');
+        showView('login');
+        return;
+    }
+
+    // Store current booking info
+    state.currentBooking.movie = movie;
+    state.currentBooking.showtime = showtime;
+    state.currentBooking.cinema = cinema;
+    state.currentBooking.seats = [];
+    state.currentBooking.total = 0;
+
+    // Update booking summary
+    document.getElementById('booking-movie-title').textContent = `${movie.title} - ${cinema.name}`;
+    document.getElementById('summary-movie').textContent = movie.title;
+    document.getElementById('summary-cinema').textContent = cinema.name;
+    document.getElementById('summary-showtime').textContent = `${showtime.date} at ${showtime.time}`;
+    document.getElementById('summary-price').textContent = `$${showtime.price}`;
+
+    // Reset summary
+    document.getElementById('summary-seats').textContent = 'None selected';
+    document.getElementById('summary-tickets').textContent = '0';
+    document.getElementById('summary-total').textContent = '$0';
+
+    // Render seats
+    renderSeats();
+
+    showView('booking');
+}
+
+function renderSeats() {
+    const container = document.getElementById('seats-container');
+    const cinema = state.currentBooking.cinema;
+    const showtime = state.currentBooking.showtime;
+    const rows = cinema.rows;
+    const cols = cinema.columns;
+    
+    let seatsHTML = '';
+    
+    // Create seat layout
+    for (let i = 0; i < rows; i++) {
+        const rowLetter = String.fromCharCode(65 + i); // A, B, C, ...
+        seatsHTML += '<div class="seat-row">';
+        for (let j = 1; j <= cols; j++) {
+            const seatId = `${rowLetter}${j}`;
+            const isOccupied = showtime.bookedSeats && showtime.bookedSeats.includes(seatId);
+            const isVip = i < 2; // First two rows are VIP
+            
+            let seatClass = 'seat';
+            if (isOccupied) seatClass += ' occupied';
+            if (isVip) seatClass += ' vip';
+            if (state.currentBooking.seats.includes(seatId)) seatClass += ' selected';
+            
+            seatsHTML += `<div class="${seatClass}" data-seat="${seatId}">${seatId}</div>`;
+        }
+        seatsHTML += '</div>';
+    }
+    
+    container.innerHTML = seatsHTML;
+    
+    // Add event listeners to seats
+    container.querySelectorAll('.seat:not(.occupied)').forEach(seat => {
+        seat.addEventListener('click', function() {
+            const seatId = this.getAttribute('data-seat');
+            toggleSeatSelection(seatId);
+        });
+    });
+}
+
+function toggleSeatSelection(seatId) {
+    const index = state.currentBooking.seats.indexOf(seatId);
+    if (index === -1) {
+        // Add seat
+        state.currentBooking.seats.push(seatId);
+    } else {
+        // Remove seat
+        state.currentBooking.seats.splice(index, 1);
+    }
+    
+    // Update UI
+    const seatElement = document.querySelector(`.seat[data-seat="${seatId}"]`);
+    if (seatElement) {
+        seatElement.classList.toggle('selected');
+    }
+    
+    // Update booking summary
+    updateBookingSummary();
+}
+function updateBookingSummary() {
+    const seatsCount = state.currentBooking.seats.length;
+    const price = state.currentBooking.showtime.price;
+    const total = seatsCount * price;
+    
+    state.currentBooking.total = total;
+    
+    document.getElementById('summary-seats').textContent = state.currentBooking.seats.join(', ') || 'None selected';
+    document.getElementById('summary-tickets').textContent = seatsCount;
+    document.getElementById('summary-total').textContent = `$${total.toFixed(2)}`;
+}
+
+function confirmBooking() {
+    if (state.currentBooking.seats.length === 0) {
+        showNotification('Please select at least one seat', 'error');
+        return;
+    }
+    
+    // Create new booking
+    const newBooking = {
+        id: Date.now(),
+        userId: state.currentUser.id,
+        showtimeId: state.currentBooking.showtime.id,
+        seats: [...state.currentBooking.seats],
+        total: state.currentBooking.total,
+        status: 'confirmed',
+        bookingDate: new Date().toISOString().split('T')[0]
+    };
+    
+    // Update showtime booked seats
+    const showtimeIndex = state.showtimes.findIndex(st => st.id === state.currentBooking.showtime.id);
+    if (showtimeIndex !== -1) {
+        // Initialize bookedSeats array if it doesn't exist
+        if (!state.showtimes[showtimeIndex].bookedSeats) {
+            state.showtimes[showtimeIndex].bookedSeats = [];
+        }
+        // Add the new booked seats
+        state.showtimes[showtimeIndex].bookedSeats.push(...state.currentBooking.seats);
+    }
+    
+    state.bookings.push(newBooking);
+    saveDataToStorage();
+    
+    showNotification(`Booking confirmed! Your booking ID is ${newBooking.id}. Total: $${newBooking.total.toFixed(2)}`, 'success');
+    
+    // Reset current booking
+    state.currentBooking = {
+        movie: null,
+        cinema: null,
+        showtime: null,
+        seats: [],
+        total: 0
+    };
+    
+    showView('user-dashboard');
+}
+        function renderSeats() {
+            const container = document.getElementById('seats-container');
+            const cinema = state.currentBooking.cinema;
+            const showtime = state.currentBooking.showtime;
+            const rows = cinema.rows;
+            const cols = cinema.columns;
+            
+            let seatsHTML = '';
+            
+            // Create seat layout
+            for (let i = 0; i < rows; i++) {
+                const rowLetter = String.fromCharCode(65 + i); // A, B, C, ...
+                seatsHTML += '<div class="seat-row">';
+                for (let j = 1; j <= cols; j++) {
+                    const seatId = `${rowLetter}${j}`;
+                    const isOccupied = showtime.bookedSeats && showtime.bookedSeats.includes(seatId);
+                    const isVip = i < 2; // First two rows are VIP
+                    
+                    let seatClass = 'seat';
+                    if (isOccupied) seatClass += ' occupied';
+                    if (isVip) seatClass += ' vip';
+                    if (state.currentBooking.seats.includes(seatId)) seatClass += ' selected';
+                    
+                    seatsHTML += `<div class="${seatClass}" data-seat="${seatId}">${seatId}</div>`;
+                }
+                seatsHTML += '</div>';
+            }
+            
+            container.innerHTML = seatsHTML;
+            
+            // Add event listeners to seats
+            container.querySelectorAll('.seat:not(.occupied)').forEach(seat => {
+                seat.addEventListener('click', function() {
+                    const seatId = this.getAttribute('data-seat');
+                    toggleSeatSelection(seatId);
+                });
+            });
+        }
+
+        function toggleSeatSelection(seatId) {
+            const index = state.currentBooking.seats.indexOf(seatId);
+            if (index === -1) {
+                // Add seat
+                state.currentBooking.seats.push(seatId);
+            } else {
+                // Remove seat
+                state.currentBooking.seats.splice(index, 1);
+            }
+            
+            // Update UI
+            const seatElement = document.querySelector(`.seat[data-seat="${seatId}"]`);
+            if (seatElement) {
+                seatElement.classList.toggle('selected');
+            }
+            
+            // Update booking summary
+            updateBookingSummary();
+        }
+
+        function updateBookingSummary() {
+            const seatsCount = state.currentBooking.seats.length;
+            const price = state.currentBooking.showtime.price;
+            const total = seatsCount * price;
+            
+            state.currentBooking.total = total;
+            
+            document.getElementById('summary-seats').textContent = 
+                state.currentBooking.seats.length > 0 ? state.currentBooking.seats.join(', ') : 'None selected';
+            document.getElementById('summary-tickets').textContent = seatsCount;
+            document.getElementById('summary-total').textContent = `$${total.toFixed(2)}`;
+        }
+
+        function confirmBooking() {
+            if (state.currentBooking.seats.length === 0) {
+                showNotification('Please select at least one seat', 'error');
+                return;
+            }
+            
+            // Check if user is logged in
+            if (!state.currentUser) {
+                showNotification('Please login to book tickets', 'error');
+                showView('login');
+                return;
+            }
+            
+            // Create new booking
+            const newBooking = {
+                id: Date.now(),
+                userId: state.currentUser.id,
+                showtimeId: state.currentBooking.showtime.id,
+                seats: [...state.currentBooking.seats],
+                total: state.currentBooking.total,
+                status: 'confirmed',
+                bookingDate: new Date().toISOString().split('T')[0]
+            };
+            
+            // Update showtime booked seats
+            const showtimeIndex = state.showtimes.findIndex(st => st.id === state.currentBooking.showtime.id);
+            if (showtimeIndex !== -1) {
+                // Initialize bookedSeats array if it doesn't exist
+                if (!state.showtimes[showtimeIndex].bookedSeats) {
+                    state.showtimes[showtimeIndex].bookedSeats = [];
+                }
+                // Add the new booked seats
+                state.showtimes[showtimeIndex].bookedSeats.push(...state.currentBooking.seats);
+            }
+            
+            // Add booking to state
+            state.bookings.push(newBooking);
+            
+            // Update user loyalty points (1 point per dollar)
+            const userIndex = state.users.findIndex(u => u.id === state.currentUser.id);
+            if (userIndex !== -1) {
+                state.users[userIndex].loyaltyPoints = (state.users[userIndex].loyaltyPoints || 0) + Math.floor(state.currentBooking.total);
+            }
+            
+            // Save to storage
+            saveDataToStorage();
+            
+            showNotification(`Booking confirmed! Your booking ID is ${newBooking.id}. Total: $${newBooking.total.toFixed(2)}`, 'success');
+            
+            // Reset current booking
+            state.currentBooking = {
+                movie: null,
+                cinema: null,
+                showtime: null,
+                seats: [],
+                total: 0
+            };
+            
+            // Go to user dashboard
+            showView('user-dashboard');
+        }
+
+        function showNotification(message, type = 'info') {
+            // Create and show notification
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            const user = state.users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                state.currentUser = user;
+                saveDataToStorage();
+                updateUI();
+                showView('home');
+                document.getElementById('login-form').reset();
+                showNotification('Login successful!', 'success');
+            } else {
+                showNotification('Invalid email or password', 'error');
+            }
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const phone = document.getElementById('register-phone').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            
+            if (password !== confirmPassword) {
+                showNotification('Passwords do not match', 'error');
+                return;
+            }
+            
+            // Check if user already exists
+            if (state.users.find(u => u.email === email)) {
+                showNotification('User with this email already exists', 'error');
+                return;
+            }
+            
+            const newUser = {
+                id: Date.now(),
+                name,
+                email,
+                phone,
+                password,
+                role: 'user',
+                joinDate: new Date().toISOString().split('T')[0],
+                loyaltyPoints: 0
+            };
+            
+            state.users.push(newUser);
+            state.currentUser = newUser;
+            saveDataToStorage();
+            updateUI();
+            showView('home');
+            document.getElementById('register-form').reset();
+            showNotification('Registration successful!', 'success');
+        }
+
+        function logout() {
+            state.currentUser = null;
+            saveDataToStorage();
+            updateUI();
+            showView('home');
+            showNotification('Logged out successfully', 'info');
+        }
+
+        function updateUI() {
+            const loginBtn = document.getElementById('loginBtn');
+            const registerBtn = document.getElementById('registerBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const adminBtn = document.getElementById('adminBtn');
+            const superAdminBtn = document.getElementById('superAdminBtn');
+            
+            if (state.currentUser) {
+                loginBtn.classList.add('d-none');
+                registerBtn.classList.add('d-none');
+                logoutBtn.classList.remove('d-none');
+                
+                if (state.currentUser.role === 'admin') {
+                    adminBtn.classList.remove('d-none');
+                    superAdminBtn.classList.add('d-none');
+                } else if (state.currentUser.role === 'super-admin') {
+                    adminBtn.classList.add('d-none');
+                    superAdminBtn.classList.remove('d-none');
+                } else {
+                    adminBtn.classList.add('d-none');
+                    superAdminBtn.classList.add('d-none');
+                }
+            } else {
+                loginBtn.classList.remove('d-none');
+                registerBtn.classList.remove('d-none');
+                logoutBtn.classList.add('d-none');
+                adminBtn.classList.add('d-none');
+                superAdminBtn.classList.add('d-none');
+            }
+        }
+
+        function renderUserDashboard() {
+            if (!state.currentUser) return;
+            
+            // Update profile information
+            document.getElementById('user-profile-name').textContent = state.currentUser.name;
+            document.getElementById('user-profile-email').textContent = state.currentUser.email;
+            document.getElementById('user-profile-phone').textContent = state.currentUser.phone;
+            document.getElementById('user-profile-join-date').textContent = state.currentUser.joinDate;
+            document.getElementById('user-profile-points').textContent = state.currentUser.loyaltyPoints || 0;
+            
+            const userBookings = state.bookings.filter(b => b.userId === state.currentUser.id);
+            const uniqueMovies = [...new Set(userBookings.map(b => b.showtimeId))];
+            
+            document.getElementById('user-profile-bookings').textContent = userBookings.length;
+            document.getElementById('user-total-bookings').textContent = userBookings.length;
+            document.getElementById('user-movies-watched').textContent = uniqueMovies.length;
+            document.getElementById('user-member-since').textContent = state.currentUser.joinDate.split('-')[0];
+            
+            // Update role badge
+            const roleBadge = document.getElementById('user-role-badge');
+            roleBadge.textContent = state.currentUser.role === 'super-admin' ? 'Super Admin' : 
+                                   state.currentUser.role === 'admin' ? 'Admin' : 'User';
+            roleBadge.className = 'badge ' + (
+                state.currentUser.role === 'super-admin' ? 'badge-danger' :
+                state.currentUser.role === 'admin' ? 'badge-warning' : 'badge-info'
+            );
+            
+               // Render bookings table
+            const tableBody = document.getElementById('user-bookings-table');
+            tableBody.innerHTML = userBookings.map(booking => {
+                const showtime = state.showtimes.find(st => st.id === booking.showtimeId);
+                const movie = state.movies.find(m => m.id === showtime.movieId);
+                const cinema = state.cinemas.find(c => c.id === showtime.cinemaId);
+                
+                return `
+                    <tr>
+                        <td>${booking.id}</td>
+                        <td>${movie ? movie.title : 'Unknown Movie'}</td>
+                        <td>${cinema.name}</td>
+                        <td>${showtime.date} ${showtime.time}</td>
+                        <td>${booking.seats.join(', ')}</td>
+                        <td>$${booking.total.toFixed(2)}</td>
+                        <td><span class="badge badge-success">${booking.status}</span></td>
+                        <td>
+                            <button class="btn btn-danger btn-sm cancel-booking" data-booking-id="${booking.id}">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Add event listeners to cancel buttons
+            tableBody.querySelectorAll('.cancel-booking').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const bookingId = parseInt(this.getAttribute('data-booking-id'));
+                    cancelBooking(bookingId);
+                });
+            });
+        }
+        function cancelBooking(bookingId) {
+            if (confirm('Are you sure you want to cancel this booking?')) {
+                const bookingIndex = state.bookings.findIndex(b => b.id === bookingId);
+                if (bookingIndex !== -1) {
+                    state.bookings[bookingIndex].status = 'cancelled';
+                    
+                    // Free up the seats
+                    const booking = state.bookings[bookingIndex];
+                    const showtimeIndex = state.showtimes.findIndex(st => st.id === booking.showtimeId);
+                    if (showtimeIndex !== -1) {
+                        state.showtimes[showtimeIndex].bookedSeats = state.showtimes[showtimeIndex].bookedSeats.filter(
+                            seat => !booking.seats.includes(seat)
+                        );
+                    }
+                    
+                    saveDataToStorage();
+                    renderUserDashboard();
+                    showNotification('Booking cancelled successfully!', 'success');
+                }
+            }
+        }
+
+        function renderAdminDashboard() {
+            if (!state.currentUser || state.currentUser.role !== 'admin') return;
+            
+            // Update stats
+            const adminCinemaId = state.currentUser.cinemaId;
+            const adminBookings = state.bookings.filter(b => {
+                const showtime = state.showtimes.find(st => st.id === b.showtimeId);
+                return showtime.cinemaId === adminCinemaId;
+            });
+            
+            document.getElementById('admin-total-bookings').textContent = adminBookings.length;
+            document.getElementById('admin-total-revenue').textContent = `$${adminBookings.reduce((sum, b) => sum + b.total, 0).toFixed(2)}`;
+            document.getElementById('admin-total-users').textContent = state.users.filter(u => u.role === 'user').length;
+            document.getElementById('admin-total-movies').textContent = state.movies.length;
+            
+            // Render admin tables
+            renderAdminMoviesTable();
+            renderAdminShowtimesTable();
+            renderAdminBookingsTable();
+            renderAdminUsersTable();
+            renderAdminCinemas();
+            
+            // Render charts
+            renderCharts();
+        }
+
+        function renderSuperAdminDashboard() {
+            if (!state.currentUser || state.currentUser.role !== 'super-admin') return;
+            
+            // Update stats
+            document.getElementById('super-admin-total-bookings').textContent = state.bookings.length;
+            document.getElementById('super-admin-total-revenue').textContent = `$${state.bookings.reduce((sum, b) => sum + b.total, 0).toFixed(2)}`;
+            document.getElementById('super-admin-total-users').textContent = state.users.length;
+            document.getElementById('super-admin-pending-admins').textContent = state.adminRequests.filter(req => req.status === 'pending').length;
+            
+            // Render super admin tables
+            renderSuperAdminMoviesTable();
+            renderSuperAdminShowtimesTable();
+            renderSuperAdminBookingsTable();
+            renderSuperAdminUsersTable();
+            renderAdminApprovalTable();
+            renderSuperCinemas();
+            
+            // Render charts
+            renderSuperCharts();
+        }
+
+        function showAdminTab(tabId, dashboardType = 'admin') {
+            // Hide all tabs
+            const prefix = dashboardType === 'super' ? 'super-' : '';
+            document.querySelectorAll('.admin-tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(`${prefix}${tabId}-tab`).classList.add('active');
+            
+            // Update active tab in sidebar
+            const dashboardView = dashboardType === 'super' ? 'super-admin-dashboard-view' : 'admin-dashboard-view';
+            document.querySelectorAll(`#${dashboardView} .admin-tab`).forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`#${dashboardView} .admin-tab[data-tab="${tabId}"]`).classList.add('active');
+        }
+
+        function renderAdminMoviesTable() {
+            const tableBody = document.getElementById('admin-movies-table');
+            tableBody.innerHTML = state.movies.map(movie => `
+                <tr>
+                    <td>${movie.title}</td>
+                    <td>${getGenreName(movie.genre)}</td>
+                    <td>${movie.duration} min</td>
+                    <td>${movie.rating}/10</td>
+                    <td><span class="badge badge-success">${movie.status === 'now-showing' ? 'Now Showing' : 'Coming Soon'}</span></td>
+                    <td>
+                        <button class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderSuperAdminMoviesTable() {
+            const tableBody = document.getElementById('super-admin-movies-table');
+            tableBody.innerHTML = state.movies.map(movie => `
+                <tr>
+                    <td>${movie.title}</td>
+                    <td>${getGenreName(movie.genre)}</td>
+                    <td>${movie.duration} min</td>
+                    <td>${movie.rating}/10</td>
+                    <td><span class="badge badge-success">${movie.status === 'now-showing' ? 'Now Showing' : 'Coming Soon'}</span></td>
+                    <td>
+                        <button class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderAdminShowtimesTable() {
+            const tableBody = document.getElementById('admin-showtimes-table');
+            const adminCinemaId = state.currentUser.cinemaId;
+            const adminShowtimes = state.showtimes.filter(st => st.cinemaId === adminCinemaId);
+            
+            tableBody.innerHTML = adminShowtimes.map(showtime => {
+                const movie = state.movies.find(m => m.id === showtime.movieId);
+                const cinema = state.cinemas.find(c => c.id === showtime.cinemaId);
+                const availableSeats = (cinema.rows * cinema.columns) - showtime.bookedSeats.length;
+                
+                return `
+                    <tr>
+                        <td>${movie ? movie.title : 'Unknown Movie'}</td>
+                        <td>${cinema.name}</td>
+                        <td>${showtime.date} at ${showtime.time}</td>
+                        <td>${availableSeats}/${cinema.rows * cinema.columns}</td>
+                        <td>$${showtime.price}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderSuperAdminShowtimesTable() {
+            const tableBody = document.getElementById('super-admin-showtimes-table');
+            tableBody.innerHTML = state.showtimes.map(showtime => {
+                const movie = state.movies.find(m => m.id === showtime.movieId);
+                const cinema = state.cinemas.find(c => c.id === showtime.cinemaId);
+                const availableSeats = (cinema.rows * cinema.columns) - showtime.bookedSeats.length;
+                
+                return `
+                    <tr>
+                        <td>${movie ? movie.title : 'Unknown Movie'}</td>
+                        <td>${cinema.name}</td>
+                        <td>${showtime.date} at ${showtime.time}</td>
+                        <td>${availableSeats}/${cinema.rows * cinema.columns}</td>
+                        <td>$${showtime.price}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderAdminBookingsTable() {
+            const tableBody = document.getElementById('admin-bookings-table');
+            const adminCinemaId = state.currentUser.cinemaId;
+            const adminBookings = state.bookings.filter(b => {
+                const showtime = state.showtimes.find(st => st.id === b.showtimeId);
+                return showtime.cinemaId === adminCinemaId;
+            });
+            
+            tableBody.innerHTML = adminBookings.map(booking => {
+                const user = state.users.find(u => u.id === booking.userId);
+                const showtime = state.showtimes.find(st => st.id === booking.showtimeId);
+                const movie = state.movies.find(m => m.id === showtime.movieId);
+                const cinema = state.cinemas.find(c => c.id === showtime.cinemaId);
+                
+                return `
+                    <tr>
+                        <td>${booking.id}</td>
+                        <td>${user.name}</td>
+                        <td>${movie ? movie.title : 'Unknown Movie'}</td>
+                        <td>${cinema.name}</td>
+                        <td>${showtime.date} ${showtime.time}</td>
+                        <td>${booking.seats.join(', ')}</td>
+                        <td>$${booking.total.toFixed(2)}</td>
+                        <td><span class="badge badge-success">${booking.status}</span></td>
+                        <td>
+                            <button class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderSuperAdminBookingsTable() {
+            const tableBody = document.getElementById('super-admin-bookings-table');
+            tableBody.innerHTML = state.bookings.map(booking => {
+                const user = state.users.find(u => u.id === booking.userId);
+                const showtime = state.showtimes.find(st => st.id === booking.showtimeId);
+                const movie = state.movies.find(m => m.id === showtime.movieId);
+                const cinema = state.cinemas.find(c => c.id === showtime.cinemaId);
+                
+                return `
+                    <tr>
+                        <td>${booking.id}</td>
+                        <td>${user.name}</td>
+                        <td>${movie ? movie.title : 'Unknown Movie'}</td>
+                        <td>${cinema.name}</td>
+                        <td>${showtime.date} ${showtime.time}</td>
+                        <td>${booking.seats.join(', ')}</td>
+                        <td>$${booking.total.toFixed(2)}</td>
+                        <td><span class="badge badge-success">${booking.status}</span></td>
+                        <td>
+                            <button class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderAdminUsersTable() {
+            const tableBody = document.getElementById('admin-users-table');
+            const regularUsers = state.users.filter(u => u.role === 'user');
+            
+            tableBody.innerHTML = regularUsers.map(user => {
+                const userBookings = state.bookings.filter(b => b.userId === user.id);
+                
+                return `
+                    <tr>
+                        <td>${user.id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td>${user.phone}</td>
+                        <td><span class="badge badge-info">${user.role}</span></td>
+                        <td>${userBookings.length}</td>
+                        <td>${user.joinDate}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderSuperAdminUsersTable() {
+            const tableBody = document.getElementById('super-admin-users-table');
+            
+            tableBody.innerHTML = state.users.map(user => {
+                const userBookings = state.bookings.filter(b => b.userId === user.id);
+                const roleBadge = user.role === 'super-admin' ? 'badge-danger' : 
+                                 user.role === 'admin' ? 'badge-warning' : 'badge-info';
+                
+                return `
+                    <tr>
+                        <td>${user.id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td>${user.phone}</td>
+                        <td><span class="badge ${roleBadge}">${user.role}</span></td>
+                        <td>${userBookings.length}</td>
+                        <td>${user.joinDate}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderAdminApprovalTable() {
+            const tableBody = document.getElementById('admin-approval-table');
+            const pendingRequests = state.adminRequests.filter(req => req.status === 'pending');
+            
+            tableBody.innerHTML = pendingRequests.map(request => `
+                <tr>
+                    <td>${request.userId}</td>
+                    <td>${request.name}</td>
+                    <td>${request.email}</td>
+                    <td>${request.phone}</td>
+                    <td>${request.cinema}</td>
+                    <td>${request.requestDate}</td>
+                    <td>
+                        <button class="btn btn-success btn-sm approve-admin" data-request-id="${request.id}">
+                            <i class="fas fa-check"></i> Approve
+                        </button>
+                        <button class="btn btn-danger btn-sm reject-admin" data-request-id="${request.id}">
+                            <i class="fas fa-times"></i> Reject
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+
+            // Add event listeners to approve/reject buttons
+            tableBody.querySelectorAll('.approve-admin').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const requestId = parseInt(this.getAttribute('data-request-id'));
+                    approveAdminRequest(requestId, true);
+                });
+            });
+
+            tableBody.querySelectorAll('.reject-admin').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const requestId = parseInt(this.getAttribute('data-request-id'));
+                    approveAdminRequest(requestId, false);
+                });
+            });
+        }
+
+        function approveAdminRequest(requestId, approve) {
+            const requestIndex = state.adminRequests.findIndex(req => req.id === requestId);
+            if (requestIndex !== -1) {
+                if (approve) {
+                    // In a real app, we would update the user's role to admin
+                    state.adminRequests[requestIndex].status = 'approved';
+                    showNotification('Admin request approved!', 'success');
+                } else {
+                    state.adminRequests[requestIndex].status = 'rejected';
+                    showNotification('Admin request rejected!', 'success');
+                }
+                saveDataToStorage();
+                renderAdminApprovalTable();
+                renderSuperAdminDashboard();
+            }
+        }
+
+        function renderAdminCinemas() {
+            const container = document.getElementById('admin-cinema-container');
+            const adminCinemaId = state.currentUser.cinemaId;
+            const adminCinema = state.cinemas.find(c => c.id === adminCinemaId);
+            
+            if (adminCinema) {
+                container.innerHTML = `
+                    <div class="cinema-card">
+                        <div class="cinema-name">${adminCinema.name}</div>
+                        <div class="cinema-location">${adminCinema.location}</div>
+                        <div class="cinema-stats">
+                            <div class="stat">
+                                <div class="stat-value">${adminCinema.screens}</div>
+                                <div class="stat-label">Screens</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">${adminCinema.capacity}</div>
+                                <div class="stat-label">Capacity</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">${Math.floor(Math.random() * 30) + 70}%</div>
+                                <div class="stat-label">Occupancy</div>
+                            </div>
+                        </div>
+                        <div class="mt-3" style="display: flex; gap: 0.5rem;">
+                            <button class="btn btn-warning btn-sm" style="flex: 1;">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function renderSuperCinemas() {
+            const container = document.getElementById('super-cinema-container');
+            
+            container.innerHTML = state.cinemas.map(cinema => `
+                <div class="cinema-card">
+                    <div class="cinema-name">${cinema.name}</div>
+                    <div class="cinema-location">${cinema.location}</div>
+                    <div class="cinema-stats">
+                        <div class="stat">
+                            <div class="stat-value">${cinema.screens}</div>
+                            <div class="stat-label">Screens</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${cinema.capacity}</div>
+                            <div class="stat-label">Capacity</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${Math.floor(Math.random() * 30) + 70}%</div>
+                            <div class="stat-label">Occupancy</div>
+                        </div>
+                    </div>
+                    <div class="mt-3" style="display: flex; gap: 0.5rem;">
+                        <button class="btn btn-warning btn-sm" style="flex: 1;">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-danger btn-sm" style="flex: 1;">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function populateMoviesDropdown() {
+            const dropdown = document.getElementById('showtime-movie');
+            dropdown.innerHTML = '<option value="">Select Movie</option>' + 
+                state.movies.map(movie => `<option value="${movie.id}">${movie.title}</option>`).join('');
+        }
+
+        function populateCinemasDropdown() {
+            const dropdown = document.getElementById('showtime-cinema');
+            dropdown.innerHTML = '<option value="">Select Cinema</option>' + 
+                state.cinemas.map(cinema => `<option value="${cinema.id}">${cinema.name}</option>`).join('');
+        }
+
+        function handleAddMovie(e) {
+            e.preventDefault();
+            
+            const newMovie = {
+                id: Date.now(),
+                title: document.getElementById('movie-title').value,
+                director: document.getElementById('movie-director').value,
+                cast: document.getElementById('movie-cast').value.split(',').map(actor => actor.trim()),
+                genre: document.getElementById('movie-genre').value,
+                language: document.getElementById('movie-language').value,
+                duration: parseInt(document.getElementById('movie-duration').value),
+                rating: parseFloat(document.getElementById('movie-rating').value),
+                releaseDate: document.getElementById('movie-release-date').value,
+                endDate: document.getElementById('movie-end-date').value,
+                description: document.getElementById('movie-description').value,
+                poster: document.getElementById('movie-poster').value,
+                status: new Date(document.getElementById('movie-release-date').value) <= new Date() ? 'now-showing' : 'coming-soon'
+            };
+            
+            state.movies.push(newMovie);
+            saveDataToStorage();
+            
+            document.getElementById('add-movie-modal').classList.add('d-none');
+            document.getElementById('add-movie-form').reset();
+            
+            // Refresh movies tables
+            renderAdminMoviesTable();
+            renderSuperAdminMoviesTable();
+            
+            showNotification('Movie added successfully!', 'success');
+        }
+
+        function handleAddShowtime(e) {
+            e.preventDefault();
+            
+            const newShowtime = {
+                id: Date.now(),
+                movieId: parseInt(document.getElementById('showtime-movie').value),
+                cinemaId: document.getElementById('showtime-cinema').value,
+                date: document.getElementById('showtime-date').value,
+                time: document.getElementById('showtime-time').value,
+                price: parseFloat(document.getElementById('showtime-price').value),
+                bookedSeats: []
+            };
+            
+            state.showtimes.push(newShowtime);
+            saveDataToStorage();
+            
+            document.getElementById('add-showtime-modal').classList.add('d-none');
+            document.getElementById('add-showtime-form').reset();
+            
+            // Refresh showtimes tables
+            renderAdminShowtimesTable();
+            renderSuperAdminShowtimesTable();
+            
+            showNotification('Showtime added successfully!', 'success');
+        }
+
+        function handleAddCinema(e) {
+            e.preventDefault();
+            
+            const newCinema = {
+                id: 'cinema-' + (state.cinemas.length + 1),
+                name: document.getElementById('cinema-name').value,
+                location: document.getElementById('cinema-location').value,
+                screens: parseInt(document.getElementById('cinema-screens').value),
+                capacity: parseInt(document.getElementById('cinema-capacity').value),
+                rows: parseInt(document.getElementById('cinema-rows').value),
+                columns: parseInt(document.getElementById('cinema-columns').value)
+            };
+            
+            state.cinemas.push(newCinema);
+            saveDataToStorage();
+            
+            document.getElementById('add-cinema-modal').classList.add('d-none');
+            document.getElementById('add-cinema-form').reset();
+            
+            // Refresh cinema views
+            renderCinemas();
+            renderSuperCinemas();
+            
+            showNotification('Cinema added successfully!', 'success');
+        }
+
+        function renderCharts() {
+            // Revenue Chart
+            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+            const revenueChart = new Chart(revenueCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Monthly Revenue',
+                        data: [12000, 19000, 15000, 22000, 18000, 25000],
+                        borderColor: '#e50914',
+                        backgroundColor: 'rgba(229, 9, 20, 0.1)',
+                        borderWidth: 2,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Monthly Revenue'
+                        }
+                    }
+                }
+            });
+
+            // Movies Chart
+            const moviesCtx = document.getElementById('moviesChart').getContext('2d');
+            const moviesChart = new Chart(moviesCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Action', 'Comedy', 'Drama', 'Sci-Fi', 'Horror'],
+                    datasets: [{
+                        data: [12, 19, 8, 15, 7],
+                        backgroundColor: [
+                            '#e50914',
+                            '#54b9c5',
+                            '#ffc107',
+                            '#28a745',
+                            '#6f42c1'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Movies by Genre'
+                        }
+                    }
+                }
+            });
+
+            // Seats Chart
+            const seatsCtx = document.getElementById('seatsChart').getContext('2d');
+            const seatsChart = new Chart(seatsCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['PVR Downtown', 'INOX Mall', 'Cinepolis Supermall', 'AMC City Center'],
+                    datasets: [{
+                        label: 'Seat Occupancy Rate',
+                        data: [85, 78, 92, 65],
+                        backgroundColor: '#54b9c5'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Seat Occupancy by Cinema'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderSuperCharts() {
+            // Revenue Chart
+            const revenueCtx = document.getElementById('super-revenueChart').getContext('2d');
+            const revenueChart = new Chart(revenueCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Monthly Revenue',
+                        data: [35000, 42000, 38000, 51000, 48000, 62000],
+                        borderColor: '#e50914',
+                        backgroundColor: 'rgba(229, 9, 20, 0.1)',
+                        borderWidth: 2,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Monthly Revenue (All Cinemas)'
+                        }
+                    }
+                }
+            });
+
+            // Movies Chart
+            const moviesCtx = document.getElementById('super-moviesChart').getContext('2d');
+            const moviesChart = new Chart(moviesCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Action', 'Comedy', 'Drama', 'Sci-Fi', 'Horror', 'Romance', 'Thriller'],
+                    datasets: [{
+                        data: [12, 19, 8, 15, 7, 10, 5],
+                        backgroundColor: [
+                            '#e50914',
+                            '#54b9c5',
+                            '#ffc107',
+                            '#28a745',
+                            '#6f42c1',
+                            '#fd7e14',
+                            '#20c997'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Movies by Genre'
+                        }
+                    }
+                }
+            });
+
+            // Seats Chart
+            const seatsCtx = document.getElementById('super-seatsChart').getContext('2d');
+            const seatsChart = new Chart(seatsCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['PVR Downtown', 'INOX Mall', 'Cinepolis Supermall', 'AMC City Center'],
+                    datasets: [{
+                        label: 'Seat Occupancy Rate',
+                        data: [85, 78, 92, 65],
+                        backgroundColor: '#54b9c5'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Seat Occupancy by Cinema'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
