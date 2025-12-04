@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useShoppingCart } from './ShoppingCartContext';
+import { useShoppingCart } from '../ShoppingCartContext';
 
 const CUSTOM_COLORS = {
   primary: '#0c1e33',
