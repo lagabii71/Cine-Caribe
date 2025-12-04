@@ -1,79 +1,79 @@
-import React, { createContext, ReactNode, useContext, useRef, useState } from 'react';
-export interface Movie {
+// ShoppingCartContext.tsx (create this file in the root of your app)
+import React, { createContext, ReactNode, useContext, useState } from 'react';
+
+interface Movie {
   id: number;
   title: string;
   poster_path: string | null;
   vote_average: number;
-  overview: string;
-  release_date: string;
 }
 
-export interface BookingItem {
+interface CartItem {
   id: string;
   movie: Movie;
+  cinema: string;
   showtime: string;
   seats: string[];
   total: number;
-  cinema: string;
+  dateAdded: string;
 }
 
 interface ShoppingCartContextType {
-  cart: BookingItem[];
-  addToCart: (item: BookingItem) => void;
+  cart: CartItem[];
+  addToCart: (item: Omit<CartItem, 'id' | 'dateAdded'>) => void;
   removeFromCart: (id: string) => void;
+  updateCartItem: (id: string, updates: Partial<CartItem>) => void;
   clearCart: () => void;
   getCartTotal: () => number;
-  getCartItemCount: () => number;
+  getItemCount: () => number;
 }
 
 const ShoppingCartContext = createContext<ShoppingCartContextType | undefined>(undefined);
 
-export const ShoppingCartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [cart, setCart] = useState<BookingItem[]>([]);
-  const cartRef = useRef(cart);
-  
-  // Update ref when cart changes
-  React.useEffect(() => {
-    cartRef.current = cart;
-  }, [cart]);
+export const useShoppingCart = () => {
+  const context = useContext(ShoppingCartContext);
+  if (!context) {
+    throw new Error('useShoppingCart must be used within a ShoppingCartProvider');
+  }
+  return context;
+};
 
-  const addToCart = (item: BookingItem) => {
-    console.log('BEFORE - Cart:', cart);
-    console.log('BEFORE - CartRef:', cartRef.current);
+interface ShoppingCartProviderProps {
+  children: ReactNode;
+}
+
+export const ShoppingCartProvider: React.FC<ShoppingCartProviderProps> = ({ children }) => {
+  const [cart, setCart] = useState<CartItem[]>([]);
+
+  const addToCart = (item: Omit<CartItem, 'id' | 'dateAdded'>) => {
+    const newItem: CartItem = {
+      ...item,
+      id: Date.now().toString(),
+      dateAdded: new Date().toISOString(),
+    };
     
-    setCart(prev => {
-      const newCart = [...prev, item];
-      console.log('DURING - New cart:', newCart);
-      return newCart;
-    });
-    
-    // Check after state update
-    setTimeout(() => {
-      console.log('AFTER - Cart:', cart);
-      console.log('AFTER - CartRef:', cartRef.current);
-    }, 100);
+    setCart(prev => [...prev, newItem]);
   };
-
 
   const removeFromCart = (id: string) => {
-    console.log('Removing from cart:', id);
-    setCart(prev => {
-      const newCart = prev.filter(item => item.id !== id);
-      console.log('New cart after removal:', newCart);
-      return newCart;
-    });
+    setCart(prev => prev.filter(item => item.id !== id));
   };
 
+  const updateCartItem = (id: string, updates: Partial<CartItem>) => {
+    setCart(prev => prev.map(item => 
+      item.id === id ? { ...item, ...updates } : item
+    ));
+  };
 
   const clearCart = () => {
     setCart([]);
   };
 
   const getCartTotal = () => {
-    return cart.reduce((sum, item) => sum + item.total, 0);
+    return cart.reduce((total, item) => total + item.total, 0);
   };
 
-  const getCartItemCount = () => {
+  const getItemCount = () => {
     return cart.reduce((count, item) => count + item.seats.length, 0);
   };
 
@@ -82,19 +82,12 @@ export const ShoppingCartProvider: React.FC<{ children: ReactNode }> = ({ childr
       cart,
       addToCart,
       removeFromCart,
+      updateCartItem,
       clearCart,
       getCartTotal,
-      getCartItemCount
+      getItemCount,
     }}>
       {children}
     </ShoppingCartContext.Provider>
   );
-};
-
-export const useShoppingCart = () => {
-  const context = useContext(ShoppingCartContext);
-  if (context === undefined) {
-    throw new Error('useShoppingCart must be used within a ShoppingCartProvider');
-  }
-  return context;
 };

@@ -110,21 +110,24 @@ export default function TabLayout() {
             }}
           />
 
-          <Tabs.Screen
-            name="rewards"
-            options={{
-              title: '',
-              tabBarIcon: () => (
-                <View style={styles.rewardsWrapper}>
-                  <Image
-                    source={require('../../assets/images/rewards.png')}
-                    style={styles.rewardsIcon}
-                    resizeMode="contain"
-                  />
-                </View>
-              ),
-            }}
-          />
+         <Tabs.Screen
+  name="rewards"
+  options={{
+    title: '',
+    tabBarIcon: () => (
+      <Image
+        source={require('../../assets/images/rewards.png')}
+        style={{
+          width: 90,
+          height: 90,
+          marginBottom: 40,
+          tintColor: Colors.dark.cinema,
+        }}
+        resizeMode="contain"
+      />
+    ),
+  }}
+/>
 
           <Tabs.Screen
             name="theaters"
@@ -181,29 +184,23 @@ const getStyles = (themeParam: any) =>
       marginLeft: 12,
     },
 
-    rewardsWrapper: {
-      position: 'absolute',
-      left: 10,
-      transform: [{ translateX: -45 }], // half of width to center
-      width: 105,
-      height: 90,
-      borderRadius: 35,
-      borderWidth: 0,
-      borderColor: Colors.dark.icon,
-      backgroundColor: '#0c1e33',
-      justifyContent: 'center',
-      alignItems: 'center',
-     // shadowColor: '#000',
-   //   shadowOffset: { width: 0, height: 4 },
-    //  shadowOpacity: 0.3,
-    //  shadowRadius: 6,
-      elevation: 10,
-    },
-
-    rewardsIcon: {
-      width: 90,
-      height: 90,
-      marginLeft: 10,
-      tintColor: Colors.dark.cinema, // or theme.cinema
-    },
+   rewardsWrapper: {
+  width: 70,
+  height: 70,
+  borderRadius: 35,
+  backgroundColor: '#0c1e33',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginBottom: 25,
+  elevation: 5,
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.3,
+  shadowRadius: 3,
+},
+rewardsIcon: {
+  width: 60,
+  height: 60,
+  tintColor: Colors.dark.cinema,
+},
   });
